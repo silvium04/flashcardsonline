@@ -1,4 +1,4 @@
-package model;
+package com.project.flashcardsonline.model;
 
 import jakarta.persistence.*;
 
