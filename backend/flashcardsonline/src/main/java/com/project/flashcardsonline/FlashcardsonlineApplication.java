@@ -10,4 +10,5 @@ public class FlashcardsonlineApplication {
 		SpringApplication.run(FlashcardsonlineApplication.class, args);
 	}
 
+
 }

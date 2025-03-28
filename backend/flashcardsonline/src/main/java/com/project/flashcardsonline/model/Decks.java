@@ -21,4 +21,43 @@ public class Decks {
     @JoinColumn(name = "userId", nullable = false)
     private Users user;
 
+    public Integer getDeckId() {
+        return deckId;
+    }
+
+    public void setDeckId(Integer deckId) {
+        this.deckId = deckId;
+    }
+
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Set<Flashcards> getIncludedFlashcards() {
+        return includedFlashcards;
+    }
+
+    public void setIncludedFlashcards(Set<Flashcards> includedFlashcards) {
+        this.includedFlashcards = includedFlashcards;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
