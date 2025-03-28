@@ -7,13 +7,14 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "FLASHCARDS")
 public class Flashcards {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer flashcardId;
     @ManyToOne
-    @JoinColumn(nullable = false)
-    private Integer deckId;
+    @JoinColumn(name="",nullable = false)
+    private Decks deck;
     @Column
     private String front;
     @Column
