@@ -13,16 +13,16 @@ public class Flashcards {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer flashcardId;
     @ManyToOne
-    @JoinColumn(name="",nullable = false)
+    @JoinColumn(name="deckId",nullable = false)
     private Decks deck;
     @Column
     private String front;
     @Column
     private String back;
     @Column
-    private Blob frontImage;
+    private String frontImage;
     @Column
-    private Blob backImage;
+    private String backImage;
     @Column
     private LocalDateTime creationDate;
     @Column
