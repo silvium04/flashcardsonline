@@ -1,13 +1,12 @@
-import logo from './logo.svg';
-import './App.css';
-import Header from './Header';
+import React from 'react';
+import SideBySideDiv from './SidebySideDiv'; // Correct default import
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-    <Header/>
+    <div>
+      <SideBySideDiv />
     </div>
   );
-}
+};
 
 export default App;

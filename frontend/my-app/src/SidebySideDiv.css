@@ -1,0 +1,10 @@
+.sideBySideContainer {
+  display: flex;
+  gap: 20px; /* Adds spacing between the divs */
+}
+
+.sideBySideItem {
+  width: 100px;
+  height: 100px;
+  background-color: lightgray; /* Default background color */
+}
