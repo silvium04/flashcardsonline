@@ -13,15 +13,18 @@ import java.util.List;
 @RestController
 public class UsersController {
 
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
 
-	@GetMapping("/createUser")
-	public Users createUser() {
-		Users user = new Users();
-		user.setUsername("test");
-		return userService.createUser(user);
+	public UsersController(UserService userService) {
+		this.userService = userService;
 	}
+
+//	@GetMapping("/createUser")
+//	public Users createUser() {
+//		Users user = new Users();
+//		user.setUsername("test");
+//		return userService.createUser(user);
+//	}
 
 	@GetMapping("/getAllUsers")
 	public List<Users> getAllUsers() {
