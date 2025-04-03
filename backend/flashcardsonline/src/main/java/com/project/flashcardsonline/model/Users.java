@@ -21,6 +21,18 @@ public class Users {
     @OneToMany(mappedBy = "user")
     private Set<Decks> decks;
 
+
+    public Users(String password, String lastname, String firstname, String username) {
+        this.password = password;
+        this.lastname = lastname;
+        this.firstname = firstname;
+        this.username = username;
+    }
+
+    public Users() {
+
+    }
+
     public Integer getUserId() {
         return userId;
     }
@@ -68,4 +80,5 @@ public class Users {
     public void setUsername(String username) {
         this.username = username;
     }
+
 }
