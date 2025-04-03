@@ -1,0 +1,53 @@
+.flashcard {
+    position: relative;
+    width: 20rem;
+    height: 12rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    border: 4px solid #3b82f6; /* Tailwind's blue-500 */
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    outline: 2px solid #9ca3af; /* Tailwind's gray-400 */
+  }
+  
+  .flashcard-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .flashcard-question {
+    font-size: 1.125rem; /* Tailwind's text-lg */
+    font-weight: 600;
+    color: #3b82f6; /* Tailwind's blue-500 */
+    text-align: center;
+  }
+  
+  .flashcard-answer {
+    font-size: 1.125rem; /* Tailwind's text-lg */
+    font-weight: 600;
+    color: #4b5563; /* Tailwind's gray-700 */
+    text-align: center;
+  }
+  
+  .flashcard-button {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5rem 1rem;
+    background-color: #3b82f6; /* Tailwind's blue-500 */
+    color: white;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+  }
+  
+  .flashcard-button:hover {
+    background-color: #2563eb; /* Tailwind's blue-600 */
+  }
