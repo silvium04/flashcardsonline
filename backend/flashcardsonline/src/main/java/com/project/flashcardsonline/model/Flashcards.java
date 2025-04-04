@@ -2,8 +2,6 @@ package com.project.flashcardsonline.model;
 
 import jakarta.persistence.*;
 
-import java.sql.Blob;
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
@@ -54,11 +52,11 @@ public class Flashcards {
         this.creationDate = creationDate;
     }
 
-    public Blob getBackImage() {
+    public String getBackImage() {
         return backImage;
     }
 
-    public void setBackImage(Blob backImage) {
+    public void setBackImage(String backImage) {
         this.backImage = backImage;
     }
 
@@ -78,11 +76,11 @@ public class Flashcards {
         this.back = back;
     }
 
-    public Blob getFrontImage() {
+    public String getFrontImage() {
         return frontImage;
     }
 
-    public void setFrontImage(Blob frontImage) {
+    public void setFrontImage(String frontImage) {
         this.frontImage = frontImage;
     }
 

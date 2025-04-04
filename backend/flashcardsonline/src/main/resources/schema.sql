@@ -25,7 +25,7 @@ create table DECKS(
 
 
 
-create table FLASHCARDS(9
+create table FLASHCARDS(
   flashcardId SERIAL PRIMARY KEY,
      deckId INT NOT NULL,
      front TEXT,
