@@ -1,6 +1,8 @@
 package com.project.flashcardsonline.Controller;
 
+import com.project.flashcardsonline.model.Users;
 import com.project.flashcardsonline.repositories.UserRepository;
+import com.project.flashcardsonline.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 	private final AuthenticationManager authManager;
 	private final UserRepository userRepo;
+	private final UserService userService;
 
-	public AuthController(AuthenticationManager authManager, UserRepository userRepo) {
+	public AuthController(AuthenticationManager authManager, UserRepository userRepo, UserService userService) {
 		this.authManager = authManager;
 		this.userRepo = userRepo;
+		this.userService = userService;
 	}
 
 	@PostMapping("/login")
@@ -37,5 +41,23 @@ public class AuthController {
 		} catch (AuthenticationException e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
 		}
+	}
+
+	@PostMapping("/register")
+	public ResponseEntity<?> register(@RequestBody Users user) {
+		if (userService.existsByUsername(user.getUsername())) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
+		}
+		if (user.getUsername() == null || user.getUsername().isEmpty() ||
+			user.getPassword() == null || user.getPassword().isEmpty() ||
+			user.getFirstname() == null || user.getFirstname().isEmpty() ||
+			user.getLastname() == null || user.getLastname().isEmpty()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Field cannot be empty");
+		}
+		if (user.getPassword().length() < 8) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password must be at least 8 characters long");
+		}
+		userService.createUser(user);
+		return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
 	}
 }

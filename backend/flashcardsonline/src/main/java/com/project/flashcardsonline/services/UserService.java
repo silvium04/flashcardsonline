@@ -28,4 +28,8 @@ public class UserService {
     public List<Users> getAllUsers() {
         return userRepository.findAll();
     }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
 }
