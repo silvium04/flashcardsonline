@@ -12,8 +12,13 @@ import java.util.List;
 @Service
 public class FlashcardsService {
 
+    private final FlashcardsRepository repository;
 
-    private FlashcardsRepository repository;
+    public FlashcardsService(FlashcardsRepository repository) {
+        this.repository = repository;
+        }
+
+
 
     public Flashcards create(Flashcards card) {
         return repository.save(card);

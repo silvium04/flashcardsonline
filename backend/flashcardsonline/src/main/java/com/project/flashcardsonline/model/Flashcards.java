@@ -20,9 +20,9 @@ public class Flashcards {
     @Column
     private String back;
     @Column
-    private String frontImage;
+    private Blob frontImage;
     @Column
-    private String backImage;
+    private Blob backImage;
     @Column
     private LocalDateTime creationDate;
     @Column
