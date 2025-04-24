@@ -14,19 +14,21 @@ public class Flashcards {
     @JoinColumn(name="deckId",nullable = false)
     private Decks deck;
     @Column
-    private String front;
+    private String frontText;
     @Column
-    private String back;
+    private String backText;
     @Column
-    private Blob frontImage;
+    private Byte[] frontImage;
     @Column
-    private Blob backImage;
+    private Byte[] backImage;
     @Column
     private LocalDateTime creationDate;
     @Column
     private LocalDateTime lastRight;
     @Column
     private Integer step;
+
+ // Konstruktoren erstellen -> Standart, alle anderen ohne Id!!!!
 
     public Integer getFlashcardId() {
         return flashcardId;
@@ -52,11 +54,11 @@ public class Flashcards {
         this.creationDate = creationDate;
     }
 
-    public String getBackImage() {
+    public Byte[] getBackImage() {
         return backImage;
     }
 
-    public void setBackImage(String backImage) {
+    public void setBackImage(Byte[] backImage) {
         this.backImage = backImage;
     }
 
@@ -68,28 +70,28 @@ public class Flashcards {
         this.lastRight = lastRight;
     }
 
-    public String getBack() {
-        return back;
+    public String getBackText() {
+        return backText;
     }
 
-    public void setBack(String back) {
-        this.back = back;
+    public void setBackText(String back) {
+        this.backText = back;
     }
 
-    public String getFrontImage() {
+    public Byte[] getFrontImage() {
         return frontImage;
     }
 
-    public void setFrontImage(String frontImage) {
+    public void setFrontImage(Byte[] frontImage) {
         this.frontImage = frontImage;
     }
 
-    public String getFront() {
-        return front;
+    public String getFrontText() {
+        return frontText;
     }
 
-    public void setFront(String front) {
-        this.front = front;
+    public void setFrontText(String frontText) {
+        this.frontText = frontText;
     }
 
     public Decks getDeck() {

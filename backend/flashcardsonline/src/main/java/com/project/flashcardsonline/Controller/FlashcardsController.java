@@ -37,7 +37,7 @@ public class FlashcardsController {
     }
 
     @GetMapping("/{id}")
-    public Flashcards getCard(@PathVariable Integer id) {
+    public Flashcards getCardById(@PathVariable Integer id) {
         return service.getById(id);
     }
 }

@@ -18,8 +18,6 @@ public class FlashcardsService {
         this.repository = repository;
         }
 
-
-
     public Flashcards create(Flashcards card) {
         return repository.save(card);
     }
