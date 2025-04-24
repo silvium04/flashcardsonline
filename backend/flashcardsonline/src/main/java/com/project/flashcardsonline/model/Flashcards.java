@@ -18,9 +18,9 @@ public class Flashcards {
     @Column
     private String backText;
     @Column
-    private Byte[] frontImage;
+    private byte[] frontImage;
     @Column
-    private Byte[] backImage;
+    private byte[] backImage;
     @Column
     private LocalDateTime creationDate;
     @Column
@@ -54,11 +54,11 @@ public class Flashcards {
         this.creationDate = creationDate;
     }
 
-    public Byte[] getBackImage() {
+    public byte[] getBackImage() {
         return backImage;
     }
 
-    public void setBackImage(Byte[] backImage) {
+    public void setBackImage(byte[] backImage) {
         this.backImage = backImage;
     }
 
@@ -78,11 +78,11 @@ public class Flashcards {
         this.backText = back;
     }
 
-    public Byte[] getFrontImage() {
+    public byte[] getFrontImage() {
         return frontImage;
     }
 
-    public void setFrontImage(Byte[] frontImage) {
+    public void setFrontImage(byte[] frontImage) {
         this.frontImage = frontImage;
     }
 
