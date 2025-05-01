@@ -37,4 +37,12 @@ public class FlashcardsService {
     public Flashcards getById(Integer id) {
         return repository.findById(id).orElse(null);
     }
+
+    public List<Flashcards> getByCategoryId(Integer categoryId) {
+        return repository.findAllByCategoryId(categoryId);
+    }
+
 }
+
+
+

@@ -38,4 +38,9 @@ public class Categories {
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
+
+    @OneToMany(mappedBy = "category")
+    private Set<DecksCategories> decksCategories;
+
+
 }

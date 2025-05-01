@@ -40,4 +40,12 @@ public class FlashcardsController {
     public Flashcards getCardById(@PathVariable Integer id) {
         return service.getById(id);
     }
+
+
+    @GetMapping("/by-category/{categoryId}")
+    public List<Flashcards> getByCategory(@PathVariable Integer categoryId) {
+        return service.getByCategoryId(categoryId);
+    }
+
+
 }

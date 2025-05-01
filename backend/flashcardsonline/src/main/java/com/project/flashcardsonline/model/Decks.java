@@ -60,4 +60,8 @@ public class Decks {
     public void setName(String name) {
         this.name = name;
     }
+
+    @OneToMany(mappedBy = "deck")
+    private Set<DecksCategories> decksCategories;
+
 }
