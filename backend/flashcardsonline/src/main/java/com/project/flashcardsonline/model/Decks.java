@@ -3,6 +3,7 @@ package com.project.flashcardsonline.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,7 +17,8 @@ public class Decks {
     @Column
     private LocalDateTime creationDate;
     @OneToMany(mappedBy = "deck")
-    private Set<Flashcards> includedFlashcards;
+    @OrderBy("flashcardId ASC")
+    private List<Flashcards> includedFlashcards;
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private Users user;
@@ -45,11 +47,11 @@ public class Decks {
         this.creationDate = creationDate;
     }
 
-    public Set<Flashcards> getIncludedFlashcards() {
+    public List<Flashcards> getIncludedFlashcards() {
         return includedFlashcards;
     }
 
-    public void setIncludedFlashcards(Set<Flashcards> includedFlashcards) {
+    public void setIncludedFlashcards(List<Flashcards> includedFlashcards) {
         this.includedFlashcards = includedFlashcards;
     }
 
