@@ -13,36 +13,40 @@ const Login = () => {
   };
 
   return (
-    <div className="container">
-      <div className="header">
-        <div className="text">Login</div>
-        <div className="underline"></div>
-      </div>
-      <div className="inputs">
-        <div className="input">
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+    <main className="page-wrapper">
+      <div className="container">
+        <div className="form-header">
+          <div className="text">Login</div>
+          <div className="underline"></div>
         </div>
-        <div className="input">
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+        <div className="inputs">
+          <div className="input">
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className="input">
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="submit-container">
+          <button className="submit" onClick={handleLogin}>
+            Login
+          </button>
+          <button className="submit small" onClick={() => navigate("/signup")}>
+            Sign Up
+          </button>
         </div>
       </div>
-      <div className="submit-container">
-        <button className="submit">Login</button>
-        <button className="submit small" onClick={() => navigate("/signup")}>
-          Sign Up
-        </button>
-      </div>
-    </div>
+    </main>
   );
 };
 
