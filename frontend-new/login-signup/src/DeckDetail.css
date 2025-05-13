@@ -81,3 +81,13 @@
 .flashcard.delete-mode:hover {
   background-color: #ff4b4b;
 }
+
+.flashcard.edit-mode {
+  border: 2px dashed #3eb489;
+  background-color: #c8f4e2;
+  color: #333;
+}
+
+.flashcard.edit-mode:hover {
+  background-color: #b2ebd6;
+}

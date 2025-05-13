@@ -75,10 +75,20 @@ const DeckOverview = () => {
           >
             <div className="deck-box">
               <span className="deck-name">{deck.name}</span>
+
               {mode === "edit" && (
                 <FontAwesomeIcon icon={faPen} className="edit-icon" />
               )}
             </div>
+            <button
+              className="learn-button"
+              onClick={(e) => {
+                e.stopPropagation(); // verhindert Klick auf Karte
+                navigate(`/learn/${deck.id}`);
+              }}
+            >
+              Lernen starten
+            </button>
           </div>
         ))}
       </div>
