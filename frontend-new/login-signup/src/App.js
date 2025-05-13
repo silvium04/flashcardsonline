@@ -5,6 +5,7 @@ import Signup from "./Signup";
 import Navbar from "./Navbar";
 import HomePage from "./HomePage";
 import DeckOverview from "./DeckOverview";
+import DeckDetail from "./DeckDetail";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/decks" element={<DeckOverview />} />
+        <Route path="/decks/:id" element={<DeckDetail />} />
         <Route path="*" element={<Login />} />
       </Routes>
     </Router>
