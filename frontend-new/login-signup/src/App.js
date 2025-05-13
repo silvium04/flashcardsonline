@@ -7,6 +7,7 @@ import HomePage from "./HomePage";
 import DeckOverview from "./DeckOverview";
 import DeckDetail from "./DeckDetail";
 import Learnmode from "./Learnmode";
+import Profile from "./Profile";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/decks" element={<DeckOverview />} />
         <Route path="/deck/:id" element={<DeckDetail />} />{" "}
         <Route path="/learn/:id" element={<Learnmode />} />
+        <Route path="/profile" element={<Profile />} />s
         {/* ❗ Muss vorhanden sein */}
         <Route path="*" element={<Login />} /> {/* Fallback ganz unten */}
       </Routes>
