@@ -4,6 +4,7 @@ import Login from "./Login";
 import Signup from "./Signup";
 import Navbar from "./Navbar";
 import HomePage from "./HomePage";
+import DeckOverview from "./DeckOverview";
 
 function App() {
   return (
@@ -12,7 +13,8 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/decks" element={<DeckOverview />} />
         <Route path="*" element={<Login />} />
       </Routes>
     </Router>
