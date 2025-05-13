@@ -14,10 +14,11 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/" element={<HomePage />} />
+        <Route path="/home" element={<HomePage />} />
         <Route path="/decks" element={<DeckOverview />} />
-        <Route path="/decks/:id" element={<DeckDetail />} />
-        <Route path="*" element={<Login />} />
+        <Route path="/deck/:id" element={<DeckDetail />} />{" "}
+        {/* ❗ Muss vorhanden sein */}
+        <Route path="*" element={<Login />} /> {/* Fallback ganz unten */}
       </Routes>
     </Router>
   );
