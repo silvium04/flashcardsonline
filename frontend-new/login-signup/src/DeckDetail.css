@@ -72,3 +72,12 @@
   background-color: #3eb489;
   color: white;
 }
+
+.flashcard.delete-mode {
+  background-color: #ff6b6b;
+  color: white;
+}
+
+.flashcard.delete-mode:hover {
+  background-color: #ff4b4b;
+}
