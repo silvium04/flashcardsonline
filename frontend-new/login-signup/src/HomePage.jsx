@@ -3,9 +3,8 @@ import "./HomePage.css";
 
 const HomePage = () => {
   return (
-    <div>
+    <div className="homepage">
       <h1>Welcome to Flashcards Online</h1>
-      <p>This is the main page of the application.</p>
     </div>
   );
 };

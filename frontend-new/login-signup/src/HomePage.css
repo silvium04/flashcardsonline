@@ -1,0 +1,13 @@
+.homepage {
+  display: flex;
+  justify-content: center; /* horizontal zentrieren */
+  align-items: center; /* vertikal zentrieren */
+  height: 100vh; /* volle Höhe des Viewports */
+  background: linear-gradient(
+    #3eb489,
+    #98ff99
+  ); /* optional: Hintergrundfarbe */
+  text-align: center;
+  flex-direction: column;
+  color: white;
+}
