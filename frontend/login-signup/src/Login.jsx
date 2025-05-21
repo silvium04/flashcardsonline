@@ -8,9 +8,12 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    // TODO: Login-Logik
+    const response = await fetch('http://localhost:8080/api/cards');
+    if (!response.ok) {
+      throw new Error('Fehler beim Laden der Karten');
+    }
+    return await response.json();
     console.log("Login:", { username, password });
-
   };
 
   return (
