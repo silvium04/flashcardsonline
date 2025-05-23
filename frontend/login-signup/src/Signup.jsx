@@ -1,0 +1,97 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./LoginSignup.css";
+
+const Signup = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSignUp = async () => {
+        if (firstName.length < 1 || lastName.length < 1 || username.length < 1 || password.length < 8) {
+            alert("Please fill in all fields correctly.");
+            return;
+        }
+        try {
+            const response = await fetch('http://localhost:8080/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                    firstName: firstName,
+                    lastName: lastName
+                })
+            });
+            const data = await response.json();
+            console.log("Signup successful:", data);
+            navigate("/decks");
+
+        } catch (error) {
+            console.error("Error during signup:", error);
+            alert("An error occurred. Please try again.");
+        }
+  };
+
+  return (
+    <div className="container">
+      <div className="form-header">
+        <div className="text">Sign Up</div>
+        <div className="underline"></div>
+      </div>
+      <div className="inputs">
+        <div className="input">
+          <input
+            type="text"
+            placeholder="First Name"
+            value={firstName}
+            required={true}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+        </div>
+        <div className="input">
+          <input
+            type="text"
+            placeholder="Last Name"
+            value={lastName}
+            required={true}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+        </div>
+        <div className="input">
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            required={true}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div className="input">
+          <input
+            type="password"
+            placeholder="Password (min. 8 characters)"
+            value={password}
+            minLength={8}
+            required={true}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+      </div>
+      <div className="submit-container">
+        <button className="submit" onClick={handleSignUp}>
+          Sign Up
+        </button>
+        <button className="submit small" onClick={() => navigate("/login")}>
+          Login
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Signup;
