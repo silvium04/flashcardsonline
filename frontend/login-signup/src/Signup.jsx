@@ -10,8 +10,31 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const handleSignUp = async () => {
-    // TODO: Sign-up-Logik
-    console.log("Signup:", { firstName, lastName, username, password });
+        if (firstName.length < 1 || lastName.length < 1 || username.length < 1 || password.length < 8) {
+            alert("Please fill in all fields correctly.");
+            return;
+        }
+        try {
+            const response = await fetch('http://localhost:8080/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                    firstName: firstName,
+                    lastName: lastName
+                })
+            });
+            const data = await response.json();
+            console.log("Signup successful:", data);
+            navigate("/decks");
+
+        } catch (error) {
+            console.error("Error during signup:", error);
+            alert("An error occurred. Please try again.");
+        }
   };
 
   return (
@@ -24,16 +47,18 @@ const Signup = () => {
         <div className="input">
           <input
             type="text"
-            placeholder="Vorname"
+            placeholder="First Name"
             value={firstName}
+            required={true}
             onChange={(e) => setFirstName(e.target.value)}
           />
         </div>
         <div className="input">
           <input
             type="text"
-            placeholder="Nachname"
+            placeholder="Last Name"
             value={lastName}
+            required={true}
             onChange={(e) => setLastName(e.target.value)}
           />
         </div>
@@ -42,14 +67,17 @@ const Signup = () => {
             type="text"
             placeholder="Username"
             value={username}
+            required={true}
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div className="input">
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Password (min. 8 characters)"
             value={password}
+            minLength={8}
+            required={true}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>

@@ -8,12 +8,27 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    const response = await fetch('http://localhost:8080/api/cards');
-    if (!response.ok) {
-      throw new Error('Fehler beim Laden der Karten');
+    try {
+      const response = await fetch('http://localhost:8080/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error);
+      }
+      console.log("Login erfolgreich:", data);
+      navigate("/decks");
+    } catch (error) {
+      console.error("Fehler beim Login:", error.message);
+      alert(error.message);
     }
-    return await response.json();
-    console.log("Login:", { username, password });
   };
 
   return (

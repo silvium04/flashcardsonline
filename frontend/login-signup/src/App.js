@@ -21,8 +21,8 @@ function App() {
         <Route path="/deck/:id" element={<DeckDetail />} />{" "}
         <Route path="/learn/:id" element={<Learnmode />} />
         <Route path="/profile" element={<Profile />} />s
-        {/* ❗ Muss vorhanden sein */}
-        <Route path="*" element={<Login />} /> {/* Fallback ganz unten */}
+        {/* Muss vorhanden sein */}
+        <Route path="*" element={<HomePage />} />
       </Routes>
     </Router>
   );

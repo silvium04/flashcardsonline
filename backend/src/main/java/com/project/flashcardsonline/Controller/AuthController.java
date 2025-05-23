@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 public class AuthController {
@@ -37,27 +39,27 @@ public class AuthController {
 			Authentication authentication = authManager.authenticate(authToken);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
-			return ResponseEntity.ok("Login successful");
+			return ResponseEntity.ok(Map.of("message", "Login successful"));
 		} catch (AuthenticationException e) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Login unsuccessful"));
 		}
 	}
 
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@RequestBody Users user) {
 		if (userService.existsByUsername(user.getUsername())) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
+			return ResponseEntity.badRequest().body(Map.of("error", "Username already exists"));
 		}
 		if (user.getUsername() == null || user.getUsername().isEmpty() ||
 			user.getPassword() == null || user.getPassword().isEmpty() ||
 			user.getFirstname() == null || user.getFirstname().isEmpty() ||
 			user.getLastname() == null || user.getLastname().isEmpty()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Field cannot be empty");
+			return ResponseEntity.badRequest().body(Map.of("error", "Field cannot be empty"));
 		}
 		if (user.getPassword().length() < 8) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password must be at least 8 characters long");
+			return ResponseEntity.badRequest().body(Map.of("error", "Password must be at least 8 characters long"));
 		}
 		userService.createUser(user);
-		return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+		return ResponseEntity.ok(Map.of("message", "User registered successfully"));
 	}
 }
