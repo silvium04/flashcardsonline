@@ -33,8 +33,8 @@ create table FLASHCARDS(
      frontImage TEXT,
      backImage TEXT,
      creationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-     lastRight TIMESTAMP,  --Ma schauen ob das wirklich umgesetzt wird// wann karte letztes mal richtig
-     step INT DEFAULT 0,  --Ma schauen ob das wirklich umgesetzt wird// wie oft karte schon richtig gehabt
+     lastRight TIMESTAMP,
+     step INT DEFAULT 0,
      FOREIGN KEY (deckId) REFERENCES DECKS(deckId) ON DELETE CASCADE
 );
 
