@@ -8,6 +8,7 @@ const Signup = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleSignUp = async () => {
         if (firstName.length < 1 || lastName.length < 1 || username.length < 1 || password.length < 8) {
@@ -15,7 +16,7 @@ const Signup = () => {
             return;
         }
         try {
-            const response = await fetch('http://localhost:8080/api/register', {
+            const response = await fetch(`${apiUrl}/api/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

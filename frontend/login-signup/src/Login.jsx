@@ -6,10 +6,11 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/login', {
+      const response = await fetch(`${apiUrl}/api/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
