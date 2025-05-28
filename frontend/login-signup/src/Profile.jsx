@@ -100,7 +100,6 @@ const Profile = () => {
                 <div>
                     <button>Delete Profile</button>
                 </div>
-
             </div>
         )}
       </div>
