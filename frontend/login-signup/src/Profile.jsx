@@ -25,10 +25,10 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <h2>Profil</h2>
+      <h2>Profile</h2>
 
       <div className="profile-info">
-        <label>Vorname:</label>
+        <label>First Name:</label>
         {isEditing ? (
           <input
             type="text"
@@ -40,7 +40,7 @@ const Profile = () => {
           <p>{userData.firstName}</p>
         )}
 
-        <label>Nachname:</label>
+        <label>Last Name:</label>
         {isEditing ? (
           <input
             type="text"
@@ -64,7 +64,7 @@ const Profile = () => {
           <p>{userData.username}</p>
         )}
 
-        <label>Passwort:</label>
+        <label>Password:</label>
         {isEditing ? (
           <input
             type={showPassword ? "text" : "password"}
@@ -85,15 +85,23 @@ const Profile = () => {
             checked={showPassword}
             onChange={() => setShowPassword(!showPassword)}
           />
-          <label htmlFor="showPassword">Passwort anzeigen</label>
+          <label htmlFor="showPassword">show Password</label>
         </div>
       )}
 
       <div className="profile-buttons">
         {isEditing ? (
-          <button onClick={handleSave}>Speichern</button>
+          <button onClick={handleSave}>Save Changes</button>
         ) : (
-          <button onClick={() => setIsEditing(true)}>Bearbeiten</button>
+            <div>
+                <div>
+                    <button onClick={() => setIsEditing(true)}>Edit</button>
+                </div>
+                <div>
+                    <button>Delete Profile</button>
+                </div>
+
+            </div>
         )}
       </div>
     </div>
