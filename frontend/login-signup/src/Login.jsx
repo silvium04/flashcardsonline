@@ -24,6 +24,7 @@ const Login = () => {
       if (!response.ok) {
         throw new Error(data.error);
       }
+      localStorage.setItem('token', data.token);
       console.log("Login erfolgreich:", data);
       navigate("/decks");
     } catch (error) {

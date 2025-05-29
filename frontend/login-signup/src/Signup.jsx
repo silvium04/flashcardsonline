@@ -3,15 +3,15 @@ import { useNavigate } from "react-router-dom";
 import "./LoginSignup.css";
 
 const Signup = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleSignUp = async () => {
-        if (firstName.length < 1 || lastName.length < 1 || username.length < 1 || password.length < 8) {
+        if (firstname.length < 1 || lastname.length < 1 || username.length < 1 || password.length < 8) {
             alert("Please fill in all fields correctly.");
             return;
         }
@@ -24,13 +24,13 @@ const Signup = () => {
                 body: JSON.stringify({
                     username: username,
                     password: password,
-                    firstName: firstName,
-                    lastName: lastName
+                    firstname: firstname,
+                    lastname: lastname
                 })
             });
             const data = await response.json();
             console.log("Signup successful:", data);
-            navigate("/decks");
+            navigate("/login");
 
         } catch (error) {
             console.error("Error during signup:", error);
@@ -49,18 +49,18 @@ const Signup = () => {
           <input
             type="text"
             placeholder="First Name"
-            value={firstName}
+            value={firstname}
             required={true}
-            onChange={(e) => setFirstName(e.target.value)}
+            onChange={(e) => setFirstname(e.target.value)}
           />
         </div>
         <div className="input">
           <input
             type="text"
             placeholder="Last Name"
-            value={lastName}
+            value={lastname}
             required={true}
-            onChange={(e) => setLastName(e.target.value)}
+            onChange={(e) => setLastname(e.target.value)}
           />
         </div>
         <div className="input">
