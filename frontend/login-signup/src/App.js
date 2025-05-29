@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route, useLocation} from "react-router-dom";
 import Login from "./Login";
 import Signup from "./Signup";
 import Navbar from "./Navbar";
@@ -9,10 +9,19 @@ import DeckDetail from "./DeckDetail";
 import Learnmode from "./Learnmode";
 import Profile from "./Profile";
 
+function NavbarWrapper() {
+    const location = useLocation();
+    const hideNavbarPaths = ['/', '/login', '/signup'];
+    const showNavbar = !hideNavbarPaths.includes(location.pathname);
+
+    return showNavbar ? <Navbar /> : null;
+}
+
+
 function App() {
   return (
     <Router>
-      <Navbar />
+      <NavbarWrapper/>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
