@@ -1,17 +1,22 @@
 package com.project.flashcardsonline.Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.flashcardsonline.dto.DeckDTO;
 import com.project.flashcardsonline.model.Decks;
 import com.project.flashcardsonline.model.Users;
 import com.project.flashcardsonline.services.DecksService;
 import com.project.flashcardsonline.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/decks")
@@ -26,23 +31,33 @@ public class DecksController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Decks>> getAllDecksForUser() {
+    private DeckDTO mapToDto(Decks deck) {
+        return new DeckDTO(deck.getDeckId(), deck.getName());
+    }
+
+    @GetMapping("/getAllDecksForUser")
+    public ResponseEntity<List<DeckDTO>> getAllDecksForUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         Users user = userRepository.findByUsername(username);
         List<Decks> decks = decksService.getDecksByUser(user);
-        return ResponseEntity.ok(decks);
+        List<DeckDTO> dtos = decks.stream().map(this::mapToDto).toList();
+        return ResponseEntity.ok(dtos);
     }
 
-    @PostMapping
-    public ResponseEntity<Decks> createDeck(@RequestBody Decks deckRequest) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        Users user = userRepository.findByUsername(username);
-        deckRequest.setUser(user);
-        deckRequest.setCreationDate(LocalDateTime.now());
-        Decks savedDeck = decksService.saveDeck(deckRequest);
-        return ResponseEntity.ok(savedDeck);
+    @PostMapping("/createDeck")
+    public ResponseEntity<DeckDTO> createDeck(@RequestBody Map<String, String> body, Principal principal) {
+        try {
+            String deckName = body.get("name");
+            Decks newDeck = new Decks(deckName, LocalDateTime.now(), userRepository.findByUsername(principal.getName()));
+            Decks deck = decksService.saveDeck(newDeck);
+            DeckDTO dto = mapToDto(deck);
+            System.out.println(new ObjectMapper().writeValueAsString(dto));
+            return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 }

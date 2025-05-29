@@ -21,7 +21,7 @@ const DeckOverview = () => {
   useEffect(() => {
     const fetchDecks = async () => {
       try {
-        const response = await authFetch(`${apiUrl}/api/decks`, {
+        const response = await authFetch(`${apiUrl}/api/decks/getAllDecksForUser`, {
           method: "GET",
         });
 
@@ -72,11 +72,14 @@ const DeckOverview = () => {
 
   const handleCreateDeck = async () => {
     const name = prompt("Name des neuen Decks:");
-    if (!newName) return;
+    if (!name) return;
 
     try {
-      const response = await authFetch(`${apiUrl}/api/decks`, {
+      const response = await authFetch(`${apiUrl}/api/decks/createDeck`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({ name: name }),
       });
 

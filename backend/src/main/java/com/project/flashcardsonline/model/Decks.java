@@ -23,6 +23,16 @@ public class Decks {
     @JoinColumn(name = "userId", nullable = false)
     private Users user;
 
+    public Decks(String name, LocalDateTime creationDate, Users user) {
+        this.name = name;
+        this.creationDate = creationDate;
+        this.user = user;
+    }
+
+    public Decks() {
+
+    }
+
     public Integer getDeckId() {
         return deckId;
     }

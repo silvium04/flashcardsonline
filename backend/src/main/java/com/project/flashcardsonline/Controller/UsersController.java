@@ -1,5 +1,6 @@
 package com.project.flashcardsonline.Controller;
 
+import com.project.flashcardsonline.dto.UserDTO;
 import com.project.flashcardsonline.model.Users;
 import com.project.flashcardsonline.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -21,13 +23,12 @@ public class UsersController {
 	}
 
 	@GetMapping("/profile")
-	public ResponseEntity<?> getUserProfile() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String username = auth.getName();
-		Users user = userService.findByUsername(username);
+	public ResponseEntity<?> getUserProfile(Principal principal) {
+		Users user = userService.findByUsername(principal.getName());
 		System.out.println(user.toString());
+		UserDTO userDTO = new UserDTO(user.getUsername(), user.getFirstname(), user.getLastname());
 		if (user != null) {
-			return ResponseEntity.ok(user);
+			return ResponseEntity.ok(userDTO);
 		}
 		return ResponseEntity.notFound().build();
 	}
