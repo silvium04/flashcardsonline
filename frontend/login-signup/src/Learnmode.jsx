@@ -6,8 +6,8 @@ const sampleDecks = {
   1: [
     {
       id: 1,
-      question: "Was ist React?",
-      answer: "Eine JavaScript-Bibliothek für UI.",
+      question: "Who founded Apple?",
+      answer: "Steve Jobs",
     },
     {
       id: 2,
@@ -44,8 +44,8 @@ const Learnmode = () => {
   if (!currentCard) {
     return (
       <div className="learnmode">
-        <h2>Keine Karten in diesem Deck.</h2>
-        <button onClick={() => navigate("/decks")}>Zurück</button>
+        <h2>My Cards.</h2>
+        <button onClick={() => navigate("/decks")}>back</button>
       </div>
     );
   }
@@ -61,13 +61,13 @@ const Learnmode = () => {
       <div className="controls">
         <button onClick={handlePrev}>&larr;</button>
         <button onClick={() => setFlipped(!flipped)} className="flip">
-          {flipped ? "Frage anzeigen" : "Antwort anzeigen"}
+          {flipped ? "show Question" : "show Answer"}
         </button>
         <button onClick={handleNext}>&rarr;</button>
       </div>
 
       <button className="exit" onClick={() => navigate("/decks")}>
-        Beenden
+        stop
       </button>
     </div>
   );
