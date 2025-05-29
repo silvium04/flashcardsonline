@@ -1,25 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./DeckOverview.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { authFetch } from "./authFetch";
 
-const initialDecks = [
-  { id: 1, name: "Unit 1" },
-  { id: 2, name: "Unit 2" },
-  { id: 3, name: "Unit 3" },
-  { id: 4, name: "Unidad 1" },
-  { id: 5, name: "Unidad 2" },
-];
+
+const apiUrl = process.env.REACT_APP_API_URL;
 
 const DeckOverview = () => {
   const [search, setSearch] = useState("");
-  const [decks, setDecks] = useState(initialDecks);
-  const [mode, setMode] = useState(null); // 'delete' or 'edit'
+  const [decks, setDecks] = useState([]);
+  const [mode, setMode] = useState(null);
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [dropdownValue, setDropdownValue] = useState("normal");
   const [selectedDeck, setSelectedDeck] = useState(null);
+
+
+  useEffect(() => {
+    const fetchDecks = async () => {
+      try {
+        const response = await authFetch(`${apiUrl}/api/decks`, {
+          method: "GET",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setDecks(data); // Hier setzen wir die Decks vom Server
+        } else {
+          console.error("Fehler beim Laden der Decks:", response.status);
+        }
+      } catch (err) {
+        console.error("Netzwerkfehler:", err);
+      }
+    };
+
+
+    fetchDecks(); // Funktion aufrufen
+  }, []);
 
 
   const filteredDecks = decks.filter((deck) =>
@@ -48,6 +67,31 @@ const DeckOverview = () => {
     }
   };
 
+
+
+
+  const handleCreateDeck = async () => {
+    const name = prompt("Name des neuen Decks:");
+    if (!newName) return;
+
+    try {
+      const response = await authFetch(`${apiUrl}/api/decks`, {
+        method: "POST",
+        body: JSON.stringify({ name: name }),
+      });
+
+      if (response.ok) {
+        const createdDeck = await response.json();
+        setDecks((prev) => [...prev, createdDeck]);
+      } else {
+        console.error("Fehler beim Erstellen des Decks:", response.status);
+      }
+    } catch (err) {
+      console.error("Netzwerkfehler:", err);
+    }
+  };
+
+
   return (
     <div className="deck-overview">
       <div className="deck-header">
@@ -55,6 +99,7 @@ const DeckOverview = () => {
         <div className="deck-controls">
           <button onClick={() => setMode("delete")}>Delete</button>
           <button onClick={() => setMode("edit")}>Edit</button>
+          <button onClick={handleCreateDeck}>New Deck</button>
           <input
             type="text"
             placeholder="Search..."
