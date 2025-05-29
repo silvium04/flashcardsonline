@@ -11,3 +11,12 @@
   flex-direction: column;
   color: white;
 }
+
+.homepage button{
+  margin: 10px;
+}
+
+.homepage h1 {
+  font-size: 3rem;
+  margin-bottom: 40px;
+}

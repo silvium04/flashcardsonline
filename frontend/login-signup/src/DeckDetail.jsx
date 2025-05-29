@@ -35,7 +35,7 @@ const DeckDetail = () => {
 
   const handleDelete = (cardId) => {
     const confirmed = window.confirm(
-      "Möchtest du diese Karte wirklich löschen?"
+      "Do you really want to delete this card?"
     );
     if (confirmed) {
       setCards((prevCards) => prevCards.filter((card) => card.id !== cardId));
@@ -46,8 +46,8 @@ const DeckDetail = () => {
     const cardToEdit = cards.find((card) => card.id === cardId);
     if (!cardToEdit) return;
 
-    const newQuestion = prompt("Neue Frage:", cardToEdit.question);
-    const newAnswer = prompt("Neue Antwort:", cardToEdit.answer);
+    const newQuestion = prompt("New Question:", cardToEdit.question);
+    const newAnswer = prompt("New Answer:", cardToEdit.answer);
 
     if (newQuestion && newAnswer) {
       setCards((prevCards) =>
@@ -67,24 +67,24 @@ const DeckDetail = () => {
       <div className="card-form">
         <input
           type="text"
-          placeholder="Frage"
+          placeholder="Question"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Antwort"
+          placeholder="Answer"
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
         />
-        <button onClick={handleAddCard}>Karteikarte erstellen</button>
+        <button onClick={handleAddCard}>add</button>
         <button
           onClick={() => {
             setDeleteMode(!deleteMode);
             setEditMode(false);
           }}
         >
-          {deleteMode ? "Löschmodus beenden" : "Karte löschen"}
+          {deleteMode ? "stop deleting" : "delete cards"}
         </button>
         <button
           onClick={() => {
@@ -92,7 +92,7 @@ const DeckDetail = () => {
             setDeleteMode(false);
           }}
         >
-          {editMode ? "Bearbeitungsmodus beenden" : "Karte bearbeiten"}
+          {editMode ? "stop editing" : "edit cards"}
         </button>
       </div>
 

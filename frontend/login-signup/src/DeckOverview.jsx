@@ -17,6 +17,10 @@ const DeckOverview = () => {
   const [decks, setDecks] = useState(initialDecks);
   const [mode, setMode] = useState(null); // 'delete' or 'edit'
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
+  const [dropdownValue, setDropdownValue] = useState("normal");
+  const [selectedDeck, setSelectedDeck] = useState(null);
+
 
   const filteredDecks = decks.filter((deck) =>
     deck.name.toLowerCase().includes(search.toLowerCase())
@@ -24,7 +28,7 @@ const DeckOverview = () => {
 
   const handleDelete = (deckId) => {
     const confirmed = window.confirm(
-      "Möchtest du dieses Deck wirklich löschen?"
+      "Do you really want to delete this deck?"
     );
     if (confirmed) {
       setDecks((prev) => prev.filter((deck) => deck.id !== deckId));
@@ -33,7 +37,7 @@ const DeckOverview = () => {
   };
 
   const handleEdit = (deckId) => {
-    const newName = prompt("Neuer Name für das Deck:");
+    const newName = prompt("New deck name:");
     if (newName) {
       setDecks((prev) =>
         prev.map((deck) =>
@@ -49,11 +53,11 @@ const DeckOverview = () => {
       <div className="deck-header">
         <h2>Decks</h2>
         <div className="deck-controls">
-          <button onClick={() => setMode("delete")}>Löschen</button>
-          <button onClick={() => setMode("edit")}>Bearbeiten</button>
+          <button onClick={() => setMode("delete")}>Delete</button>
+          <button onClick={() => setMode("edit")}>Edit</button>
           <input
             type="text"
-            placeholder="Suchen..."
+            placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -83,15 +87,54 @@ const DeckOverview = () => {
             <button
               className="learn-button"
               onClick={(e) => {
-                e.stopPropagation(); // verhindert Klick auf Karte
-                navigate(`/learn/${deck.id}`);
+                e.stopPropagation();
+                setSelectedDeck(deck.id);
+                setShowPopup(true);
               }}
             >
-              Lernen starten
+              Start Learning
             </button>
           </div>
         ))}
       </div>
+      {showPopup && (
+          <div className="popup-overlay">
+            <div className="popup-content">
+              <h3>choose learnigmode</h3>
+              <select
+                  value={dropdownValue}
+                  onChange={(e) => setDropdownValue(e.target.value)}
+              >
+                <option value="normal">normal</option>
+                <option value="backwards">backwards</option>
+                <option value="random">random</option>
+                <option value="leitner">Leitner System</option>
+              </select>
+              <div >
+                <div align={"center"}>
+                  <button
+                      className="submit"
+                      onClick={() => {
+                        setShowPopup(false);
+                        // Hier könntest du z.B. navigate(`/learn/${selectedDeck}?mode=${dropdownValue}`)
+                      }}
+                  >
+                    Start
+                  </button>
+                </div>
+                <div align={"center"}>
+                  <button
+                      className="submit"
+                      onClick={() => setShowPopup(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+      )}
     </div>
   );
 };
