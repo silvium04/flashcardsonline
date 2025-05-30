@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.flashcardsonline.dto.DeckDTO;
 import com.project.flashcardsonline.model.Decks;
 import com.project.flashcardsonline.model.Users;
-import com.project.flashcardsonline.services.DecksService;
+import com.project.flashcardsonline.service.DecksService;
 import com.project.flashcardsonline.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

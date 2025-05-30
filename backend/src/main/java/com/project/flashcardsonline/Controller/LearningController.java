@@ -1,7 +1,7 @@
 package com.project.flashcardsonline.Controller;
 
 import com.project.flashcardsonline.model.Flashcards;
-import com.project.flashcardsonline.services.LearningService;
+import com.project.flashcardsonline.service.LearningService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

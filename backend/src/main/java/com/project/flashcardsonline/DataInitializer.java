@@ -3,16 +3,14 @@ package com.project.flashcardsonline;
 import com.project.flashcardsonline.model.Decks;
 import com.project.flashcardsonline.model.Flashcards;
 import com.project.flashcardsonline.model.Users;
-import com.project.flashcardsonline.services.DecksService;
-import com.project.flashcardsonline.services.FlashcardsService;
-import com.project.flashcardsonline.services.UserService;
+import com.project.flashcardsonline.service.DecksService;
+import com.project.flashcardsonline.service.FlashcardsService;
+import com.project.flashcardsonline.service.UserService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @Profile("dev")

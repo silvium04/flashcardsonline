@@ -1,8 +1,7 @@
-package com.project.flashcardsonline.services;
+package com.project.flashcardsonline.service;
 
 import com.project.flashcardsonline.model.Flashcards;
 import com.project.flashcardsonline.repositories.FlashcardsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.project.flashcardsonline.Controller;
+package com.project.flashcardsonline.dto;
 
 public class LoginRequest {
 	private String username;
