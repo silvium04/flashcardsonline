@@ -160,15 +160,15 @@ const DeckOverview = () => {
               </select>
               <div >
                 <div align={"center"}>
-                  <button
-                      className="submit"
-                      onClick={() => {
-                        setShowPopup(false);
-                        // Hier könntest du z.B. navigate(`/learn/${selectedDeck}?mode=${dropdownValue}`)
-                      }}
-                  >
-                    Start
-                  </button>
+                <button
+                  className="submit"
+                  onClick={() => {
+                    setShowPopup(false);
+                    navigate(`/deck/${selectedDeck}`);
+                  }}
+                >
+                  Start
+                </button>
                 </div>
                 <div align={"center"}>
                   <button
