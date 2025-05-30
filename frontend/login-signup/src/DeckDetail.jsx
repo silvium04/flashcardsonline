@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { authFetch } from "./authFetch";
 import "./DeckDetail.css";
+
+const apiUrl = process.env.REACT_APP_API_URL;
+
+
 
 const DeckDetail = () => {
   const { id } = useParams();
@@ -10,6 +15,27 @@ const DeckDetail = () => {
   const [answer, setAnswer] = useState("");
   const [deleteMode, setDeleteMode] = useState(false);
   const [editMode, setEditMode] = useState(false);
+
+    useEffect(() => {
+      const fetchFlashcards = async () => {
+        try {
+          const response = await authFetch(`${apiUrl}/api/flashcards/deck/${id}`);
+          if (response.ok) {
+            const data = await response.json();
+            const cardsWithFlip = data.map((card) => ({ ...card, flipped: false }));
+            setCards(cardsWithFlip);
+          } else {
+            console.error("Fehler beim Laden der Flashcards");
+          }
+        } catch (err) {
+          console.error("Netzwerkfehler", err);
+        }
+      };
+
+      fetchFlashcards();
+    }, [id]);
+
+
 
   const handleAddCard = () => {
     if (question && answer) {

@@ -47,5 +47,10 @@ public class FlashcardsController {
         return service.getByCategoryId(categoryId);
     }
 
+    @GetMapping("/deck/{deckId}")
+    public List<Flashcards> getFlashcardsByDeck(@PathVariable Integer deckId) {
+        return service.getByDeckId(deckId);
+    }
+
 
 }
