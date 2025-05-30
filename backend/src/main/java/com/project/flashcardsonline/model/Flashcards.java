@@ -28,7 +28,12 @@ public class Flashcards {
     @Column
     private Integer step;
 
- // Konstruktoren erstellen -> Standart, alle anderen ohne Id!!!!
+    public Flashcards(Decks deck, String frontText, String backText, LocalDateTime creationDate) {
+        this.deck = deck;
+        this.frontText = frontText;
+        this.backText = backText;
+        this.creationDate = creationDate;
+    }
 
     public Integer getFlashcardId() {
         return flashcardId;

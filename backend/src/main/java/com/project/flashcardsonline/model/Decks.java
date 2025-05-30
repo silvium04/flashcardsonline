@@ -29,6 +29,13 @@ public class Decks {
         this.user = user;
     }
 
+    public Decks(String name, LocalDateTime creationDate, List<Flashcards> includedFlashcards, Users user) {
+        this.name = name;
+        this.creationDate = creationDate;
+        this.includedFlashcards = includedFlashcards;
+        this.user = user;
+    }
+
     public Decks() {
 
     }
