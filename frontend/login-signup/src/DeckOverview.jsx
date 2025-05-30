@@ -125,6 +125,16 @@ const DeckOverview = () => {
               else navigate(`/deck/${deck.id}`);
             }}
           >
+          <button
+              className="submit"
+              onClick={(e) => {
+                e.stopPropagation(); // verhindert, dass das div selbst den Klick behandelt
+                setShowPopup(false);
+                navigate(`/deck/${deck.id}`); // navigiert zur Deck-Detailseite
+              }}
+            >
+              Start
+            </button>
             <div className="deck-box">
               <span className="deck-name">{deck.name}</span>
 
@@ -160,15 +170,15 @@ const DeckOverview = () => {
               </select>
               <div >
                 <div align={"center"}>
-                <button
-                  className="submit"
-                  onClick={() => {
-                    setShowPopup(false);
-                    navigate(`/deck/${selectedDeck}`);
-                  }}
-                >
-                  Start
-                </button>
+                  <button
+                      className="submit"
+                      onClick={() => {
+                        setShowPopup(false);
+                        // Hier könntest du z.B. navigate(`/learn/${selectedDeck}?mode=${dropdownValue}`)
+                      }}
+                  >
+                    Start
+                  </button>
                 </div>
                 <div align={"center"}>
                   <button
