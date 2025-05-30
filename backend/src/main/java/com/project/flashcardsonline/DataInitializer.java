@@ -34,17 +34,29 @@ public class DataInitializer {
 		userService.createUser(users);
 		System.out.println(users.toString());
 
-		Decks deck = new Decks("Test Deck", LocalDateTime.now(), users);
-		decksService.saveDeck(deck);
+		Decks deck1 = new Decks("Test Deck", LocalDateTime.now(), users);
+		decksService.saveDeck(deck1);
 
-		Flashcards flashcard1 = new Flashcards(deck, "Question 1", "Answer 1", LocalDateTime.now());
+		Flashcards flashcard1 = new Flashcards(deck1, "Question 1", "Answer 1", LocalDateTime.now());
 		flashcardsService.create(flashcard1);
-		Flashcards flashcard2 = new Flashcards(deck, "Question 2", "Answer 2", LocalDateTime.now());
+		Flashcards flashcard2 = new Flashcards(deck1, "Question 2", "Answer 2", LocalDateTime.now());
 		flashcardsService.create(flashcard2);
-		Flashcards flashcard3 = new Flashcards(deck, "Question 3", "Answer 3", LocalDateTime.now());
+		Flashcards flashcard3 = new Flashcards(deck1, "Question 3", "Answer 3", LocalDateTime.now());
 		flashcardsService.create(flashcard3);
-		Flashcards flashcard4 = new Flashcards(deck, "Question 4", "Answer 4", LocalDateTime.now());
+		Flashcards flashcard4 = new Flashcards(deck1, "Question 4", "Answer 4", LocalDateTime.now());
 		flashcardsService.create(flashcard4);
+
+		Decks deck2 = new Decks("Deck 2", LocalDateTime.now(), users);
+		decksService.saveDeck(deck2);
+
+		Flashcards flashcard5 = new Flashcards(deck2, "Question 1", "Answer 1", LocalDateTime.now());
+		flashcardsService.create(flashcard5);
+		Flashcards flashcard6 = new Flashcards(deck2, "Question 2", "Answer 2", LocalDateTime.now());
+		flashcardsService.create(flashcard6);
+		Flashcards flashcard7 = new Flashcards(deck2, "Question 3", "Answer 3", LocalDateTime.now());
+		flashcardsService.create(flashcard7);
+		Flashcards flashcard8 = new Flashcards(deck2, "Question 4", "Answer 4", LocalDateTime.now());
+		flashcardsService.create(flashcard8);
 
 
 

@@ -35,6 +35,10 @@ public class Flashcards {
         this.creationDate = creationDate;
     }
 
+    public Flashcards() {
+
+    }
+
     public Integer getFlashcardId() {
         return flashcardId;
     }

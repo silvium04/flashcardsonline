@@ -17,28 +17,28 @@ const DeckOverview = () => {
   const [dropdownValue, setDropdownValue] = useState("normal");
   const [selectedDeck, setSelectedDeck] = useState(null);
 
+  const fetchDecks = async () => {
+    try {
+      const response = await authFetch(`${apiUrl}/api/decks/getAllDecksForUser`, {
+        method: "GET",
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setDecks(data); // Hier setzen wir die Decks vom Server
+      } else {
+        console.error("Fehler beim Laden der Decks:", response.status);
+      }
+    } catch (err) {
+      console.error("Netzwerkfehler:", err);
+    }
+  };
 
   useEffect(() => {
-    const fetchDecks = async () => {
-      try {
-        const response = await authFetch(`${apiUrl}/api/decks/getAllDecksForUser`, {
-          method: "GET",
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setDecks(data); // Hier setzen wir die Decks vom Server
-        } else {
-          console.error("Fehler beim Laden der Decks:", response.status);
-        }
-      } catch (err) {
-        console.error("Netzwerkfehler:", err);
-      }
-    };
-
-
-    fetchDecks(); // Funktion aufrufen
+    fetchDecks();
   }, []);
+
 
 
   const filteredDecks = decks.filter((deck) =>
@@ -66,9 +66,6 @@ const DeckOverview = () => {
       setMode(null);
     }
   };
-
-
-
 
   const handleCreateDeck = async () => {
     const name = prompt("Name des neuen Decks:");
@@ -115,26 +112,17 @@ const DeckOverview = () => {
       <div className="deck-grid">
         {filteredDecks.map((deck) => (
           <div
-            key={deck.id}
+
             className={`deck-card ${mode === "delete" ? "delete-mode" : ""} ${
               mode === "edit" ? "edit-mode" : ""
             }`}
             onClick={() => {
-              if (mode === "delete") handleDelete(deck.id);
-              else if (mode === "edit") handleEdit(deck.id);
-              else navigate(`/deck/${deck.id}`);
+              console.log(deck);
+              if (mode === "delete") handleDelete(deck.deckId);
+              else if (mode === "edit") handleEdit(deck.deckId);
+              else navigate(`/deck/${deck.deckId}`);
             }}
           >
-          <button
-              className="submit"
-              onClick={(e) => {
-                e.stopPropagation(); // verhindert, dass das div selbst den Klick behandelt
-                setShowPopup(false);
-                navigate(`/deck/${deck.id}`); // navigiert zur Deck-Detailseite
-              }}
-            >
-              Start
-            </button>
             <div className="deck-box">
               <span className="deck-name">{deck.name}</span>
 
@@ -146,7 +134,7 @@ const DeckOverview = () => {
               className="learn-button"
               onClick={(e) => {
                 e.stopPropagation();
-                setSelectedDeck(deck.id);
+                setSelectedDeck(deck.deckId);
                 setShowPopup(true);
               }}
             >

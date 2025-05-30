@@ -1,5 +1,6 @@
 package com.project.flashcardsonline.Controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.flashcardsonline.dto.DeckDTO;
 import com.project.flashcardsonline.model.Decks;
@@ -36,12 +37,13 @@ public class DecksController {
     }
 
     @GetMapping("/getAllDecksForUser")
-    public ResponseEntity<List<DeckDTO>> getAllDecksForUser() {
+    public ResponseEntity<List<DeckDTO>> getAllDecksForUser() throws JsonProcessingException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         Users user = userRepository.findByUsername(username);
         List<Decks> decks = decksService.getDecksByUser(user);
         List<DeckDTO> dtos = decks.stream().map(this::mapToDto).toList();
+        System.out.println(new ObjectMapper().writeValueAsString(dtos));
         return ResponseEntity.ok(dtos);
     }
 

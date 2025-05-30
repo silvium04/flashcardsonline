@@ -8,7 +8,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 
 const DeckDetail = () => {
-  const { id } = useParams();
+  const { deckId } = useParams();
   const navigate = useNavigate();
   const [cards, setCards] = useState([]);
   const [question, setQuestion] = useState("");
@@ -19,7 +19,7 @@ const DeckDetail = () => {
     useEffect(() => {
       const fetchFlashcards = async () => {
         try {
-          const response = await authFetch(`${apiUrl}/api/flashcards/deck/${id}`);
+          const response = await authFetch(`${apiUrl}/api/flashcards/deck/${deckId}`);
           if (response.ok) {
             const data = await response.json();
             const cardsWithFlip = data.map((card) => ({ ...card, flipped: false }));
@@ -33,14 +33,13 @@ const DeckDetail = () => {
       };
 
       fetchFlashcards();
-    }, [id]);
+    }, [deckId]);
 
 
 
   const handleAddCard = () => {
     if (question && answer) {
       const newCard = {
-        id: Date.now(),
         question,
         answer,
         flipped: false,
@@ -88,7 +87,7 @@ const DeckDetail = () => {
 
   return (
     <div className="deck-detail">
-      <h2>Deck {id}</h2>
+      <h2>Deck {deckId}</h2>
 
       <div className="card-form">
         <input
