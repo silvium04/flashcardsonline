@@ -23,6 +23,11 @@ public class Decks {
     @JoinColumn(name = "userId", nullable = false)
     private Users user;
 
+
+    @OneToMany(mappedBy = "deck")
+    private Set<DecksCategories> decksCategories;
+
+
     public Decks(String name, LocalDateTime creationDate, Users user) {
         this.name = name;
         this.creationDate = creationDate;
@@ -80,7 +85,6 @@ public class Decks {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "deck")
-    private Set<DecksCategories> decksCategories;
+
 
 }

@@ -3,6 +3,8 @@ package com.project.flashcardsonline.Controller;
 import com.project.flashcardsonline.model.Flashcards;
 import com.project.flashcardsonline.services.FlashcardsService;
 import org.springframework.web.bind.annotation.*;
+import com.project.flashcardsonline.dto.FlashcardDTO;
+
 
 import java.util.List;
 
@@ -47,9 +49,21 @@ public class FlashcardsController {
         return service.getByCategoryId(categoryId);
     }
 
+    //@GetMapping("/deck/{deckId}")
+   // public List<Flashcards> getFlashcardsByDeck(@PathVariable Integer deckId) {
+    //    return service.getByDeckId(deckId);
+   // }
+
     @GetMapping("/deck/{deckId}")
-    public List<Flashcards> getFlashcardsByDeck(@PathVariable Integer deckId) {
-        return service.getByDeckId(deckId);
+    public List<FlashcardDTO> getFlashcardDTOsByDeck(@PathVariable Integer deckId) {
+        List<Flashcards> cards = service.getByDeckId(deckId);
+        return cards.stream()
+                .map(card -> new FlashcardDTO(
+                        card.getFlashcardId(),
+                        card.getFrontText(),
+                        card.getBackText()
+                ))
+                .toList();
     }
 
 

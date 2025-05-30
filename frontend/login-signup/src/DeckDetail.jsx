@@ -5,8 +5,6 @@ import "./DeckDetail.css";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-
-
 const DeckDetail = () => {
   const { deckId } = useParams();
   const navigate = useNavigate();
@@ -16,39 +14,55 @@ const DeckDetail = () => {
   const [deleteMode, setDeleteMode] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
-    useEffect(() => {
-      const fetchFlashcards = async () => {
-        try {
-          const response = await authFetch(`${apiUrl}/api/flashcards/deck/${deckId}`);
-          if (response.ok) {
-            const data = await response.json();
-            const cardsWithFlip = data.map((card) => ({ ...card, flipped: false }));
-            setCards(cardsWithFlip);
-          } else {
-            console.error("Fehler beim Laden der Flashcards");
-          }
-        } catch (err) {
-          console.error("Netzwerkfehler", err);
+  useEffect(() => {
+    const fetchFlashcards = async () => {
+      try {
+        const response = await authFetch(`${apiUrl}/api/flashcards/deck/${deckId}`);
+        if (response.ok) {
+          const data = await response.json();
+          const cardsWithFlip = data.map((card) => ({ ...card, flipped: false }));
+          setCards(cardsWithFlip);
+        } else {
+          console.error("Fehler beim Laden der Flashcards");
         }
-      };
+      } catch (err) {
+        console.error("Netzwerkfehler", err);
+      }
+    };
 
-      fetchFlashcards();
-    }, [deckId]);
+    fetchFlashcards();
+  }, [deckId]);
 
-
-
-  const handleAddCard = () => {
+  // 🔧 START ADD: Neue Karte per POST speichern
+  const handleAddCard = async () => {
     if (question && answer) {
-      const newCard = {
-        question,
-        answer,
-        flipped: false,
-      };
-      setCards([...cards, newCard]);
-      setQuestion("");
-      setAnswer("");
+      try {
+        const response = await authFetch(`${apiUrl}/api/flashcards`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            frontText: question,
+            backText: answer,
+            deck: { deckId: parseInt(deckId) },
+          }),
+        });
+
+        if (response.ok) {
+          const savedCard = await response.json();
+          setCards((prev) => [...prev, { ...savedCard, flipped: false }]);
+          setQuestion("");
+          setAnswer("");
+        } else {
+          console.error("Konnte Karte nicht speichern");
+        }
+      } catch (err) {
+        console.error("Netzwerkfehler beim Speichern", err);
+      }
     }
   };
+  // 🔧 ENDE ADD
 
   const toggleFlip = (cardId) => {
     setCards((prevCards) =>
@@ -58,16 +72,28 @@ const DeckDetail = () => {
     );
   };
 
-  const handleDelete = (cardId) => {
-    const confirmed = window.confirm(
-      "Do you really want to delete this card?"
-    );
+  // 🔧 START DELETE: Karte per DELETE im Backend entfernen
+  const handleDelete = async (cardId) => {
+    const confirmed = window.confirm("Do you really want to delete this card?");
     if (confirmed) {
-      setCards((prevCards) => prevCards.filter((card) => card.id !== cardId));
+      try {
+        const response = await authFetch(`${apiUrl}/api/flashcards/${cardId}`, {
+          method: "DELETE",
+        });
+        if (response.ok) {
+          setCards((prevCards) => prevCards.filter((card) => card.id !== cardId));
+        } else {
+          console.error("Konnte Karte nicht löschen");
+        }
+      } catch (err) {
+        console.error("Netzwerkfehler beim Löschen", err);
+      }
     }
   };
+  // 🔧 ENDE DELETE
 
-  const handleEdit = (cardId) => {
+  // 🔧 START EDIT: Karte per PUT im Backend aktualisieren
+  const handleEdit = async (cardId) => {
     const cardToEdit = cards.find((card) => card.id === cardId);
     if (!cardToEdit) return;
 
@@ -75,15 +101,36 @@ const DeckDetail = () => {
     const newAnswer = prompt("New Answer:", cardToEdit.answer);
 
     if (newQuestion && newAnswer) {
-      setCards((prevCards) =>
-        prevCards.map((card) =>
-          card.id === cardId
-            ? { ...card, question: newQuestion, answer: newAnswer }
-            : card
-        )
-      );
+      try {
+        const response = await authFetch(`${apiUrl}/api/flashcards`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            flashcardId: cardId,
+            frontText: newQuestion,
+            backText: newAnswer,
+            deck: { deckId: parseInt(deckId) },
+          }),
+        });
+
+        if (response.ok) {
+          const updatedCard = await response.json();
+          setCards((prevCards) =>
+            prevCards.map((card) =>
+              card.id === cardId ? { ...updatedCard, flipped: false } : card
+            )
+          );
+        } else {
+          console.error("Konnte Karte nicht aktualisieren");
+        }
+      } catch (err) {
+        console.error("Netzwerkfehler beim Aktualisieren", err);
+      }
     }
   };
+  // 🔧 ENDE EDIT
 
   return (
     <div className="deck-detail">
