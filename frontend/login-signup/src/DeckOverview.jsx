@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { authFetch } from "./authFetch";
 
-
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const DeckOverview = () => {
@@ -17,6 +16,11 @@ const DeckOverview = () => {
   const [dropdownValue, setDropdownValue] = useState("normal");
   const [selectedDeck, setSelectedDeck] = useState(null);
 
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [showCreatePopup, setShowCreatePopup] = useState(false);
+  const [tempName, setTempName] = useState("");
+
   const fetchDecks = async () => {
     try {
       const response = await authFetch(`${apiUrl}/api/decks/getAllDecksForUser`, {
@@ -25,8 +29,7 @@ const DeckOverview = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
-        setDecks(data); // Hier setzen wir die Decks vom Server
+        setDecks(data);
       } else {
         console.error("Fehler beim Laden der Decks:", response.status);
       }
@@ -39,24 +42,16 @@ const DeckOverview = () => {
     fetchDecks();
   }, []);
 
-
-
   const filteredDecks = decks.filter((deck) =>
     deck.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleDelete = (deckId) => {
-    const confirmed = window.confirm(
-      "Do you really want to delete this deck?"
-    );
-    if (confirmed) {
-      setDecks((prev) => prev.filter((deck) => deck.id !== deckId));
-      setMode(null);
-    }
+    setDecks((prev) => prev.filter((deck) => deck.id !== deckId));
+    setMode(null);
   };
 
-  const handleEdit = (deckId) => {
-    const newName = prompt("New deck name:");
+  const handleEdit = (deckId, newName) => {
     if (newName) {
       setDecks((prev) =>
         prev.map((deck) =>
@@ -67,8 +62,7 @@ const DeckOverview = () => {
     }
   };
 
-  const handleCreateDeck = async () => {
-    const name = prompt("Name des neuen Decks:");
+  const handleCreateDeck = async (name) => {
     if (!name) return;
 
     try {
@@ -91,7 +85,6 @@ const DeckOverview = () => {
     }
   };
 
-
   return (
     <div className="deck-overview">
       <div className="deck-header">
@@ -99,7 +92,7 @@ const DeckOverview = () => {
         <div className="deck-controls">
           <button onClick={() => setMode("delete")}>Delete</button>
           <button onClick={() => setMode("edit")}>Edit</button>
-          <button onClick={handleCreateDeck}>New Deck</button>
+          <button onClick={() => setShowCreatePopup(true)}>New Deck</button>
           <input
             type="text"
             placeholder="Search..."
@@ -112,20 +105,25 @@ const DeckOverview = () => {
       <div className="deck-grid">
         {filteredDecks.map((deck) => (
           <div
-
+            key={deck.deckId}
             className={`deck-card ${mode === "delete" ? "delete-mode" : ""} ${
               mode === "edit" ? "edit-mode" : ""
             }`}
             onClick={() => {
-              console.log(deck);
-              if (mode === "delete") handleDelete(deck.deckId);
-              else if (mode === "edit") handleEdit(deck.deckId);
-              else navigate(`/deck/${deck.deckId}`);
+              if (mode === "delete") {
+                setSelectedDeck(deck.deckId);
+                setShowDeletePopup(true);
+              } else if (mode === "edit") {
+                setSelectedDeck(deck.deckId);
+                setTempName(deck.name);
+                setShowEditPopup(true);
+              } else {
+                navigate(`/deck/${deck.deckId}`);
+              }
             }}
           >
             <div className="deck-box">
               <span className="deck-name">{deck.name}</span>
-
               {mode === "edit" && (
                 <FontAwesomeIcon icon={faPen} className="edit-icon" />
               )}
@@ -143,43 +141,97 @@ const DeckOverview = () => {
           </div>
         ))}
       </div>
-      {showPopup && (
-          <div className="popup-overlay">
-            <div className="popup-content">
-              <h3>choose learnigmode</h3>
-              <select
-                  value={dropdownValue}
-                  onChange={(e) => setDropdownValue(e.target.value)}
-              >
-                <option value="normal">normal</option>
-                <option value="backwards">backwards</option>
-                <option value="random">random</option>
-                <option value="leitner">Leitner System</option>
-              </select>
-              <div >
-                <div align={"center"}>
-                  <button
-                      className="submit"
-                      onClick={() => {
-                        setShowPopup(false);
-                        // Hier könntest du z.B. navigate(`/learn/${selectedDeck}?mode=${dropdownValue}`)
-                      }}
-                  >
-                    Start
-                  </button>
-                </div>
-                <div align={"center"}>
-                  <button
-                      className="submit"
-                      onClick={() => setShowPopup(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
 
+      {/* Start Learning Popup */}
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h3>Choose learning mode</h3>
+            <select
+              value={dropdownValue}
+              onChange={(e) => setDropdownValue(e.target.value)}
+            >
+              <option value="normal">normal</option>
+              <option value="backwards">backwards</option>
+              <option value="random">random</option>
+              <option value="leitner">Leitner System</option>
+            </select>
+            <div className="button-group">
+              <div
+                className="submit"
+                onClick={() => {
+                  setShowPopup(false);
+                  navigate(`/learn/${selectedDeck}?mode=${dropdownValue}`);
+                }}
+              >
+                Start
+              </div>
+              <div className="submit" onClick={() => setShowPopup(false)}>
+                Cancel
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Delete Popup */}
+      {showDeletePopup && selectedDeck && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <p>Do you really want to delete this deck?</p>
+            <div className="button-group">
+              <div className="submit" onClick={() => {
+                handleDelete(selectedDeck);
+                setShowDeletePopup(false);
+              }}>Delete</div>
+              <div className="submit" onClick={() => setShowDeletePopup(false)}>Cancel</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Popup */}
+      {showEditPopup && selectedDeck && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <p>Enter new name for deck:</p>
+            <input
+              type="text"
+              value={tempName}
+              onChange={(e) => setTempName(e.target.value)}
+            />
+            <div className="button-group">
+              <div className="submit" onClick={() => {
+                handleEdit(selectedDeck, tempName);
+                setShowEditPopup(false);
+                setTempName("");
+              }}>Save</div>
+              <div className="submit" onClick={() => setShowEditPopup(false)}>Cancel</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Popup */}
+      {showCreatePopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <p>Name of new deck:</p>
+            <input
+              type="text"
+              value={tempName}
+              onChange={(e) => setTempName(e.target.value)}
+            />
+            <div className="button-group">
+              <div className="submit" onClick={() => {
+                handleCreateDeck(tempName);
+                setShowCreatePopup(false);
+                setTempName("");
+              }}>Create</div>
+              <div className="submit" onClick={() => setShowCreatePopup(false)}>Cancel</div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
