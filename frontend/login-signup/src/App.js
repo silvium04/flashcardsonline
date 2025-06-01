@@ -11,7 +11,7 @@ import Profile from "./Profile";
 
 function NavbarWrapper() {
     const location = useLocation();
-    const hideNavbarPaths = ['/', '/login', '/signup'];
+    const hideNavbarPaths = ['/', '/login', '/signup', '/home'];
     const showNavbar = !hideNavbarPaths.includes(location.pathname);
 
     return showNavbar ? <Navbar /> : null;

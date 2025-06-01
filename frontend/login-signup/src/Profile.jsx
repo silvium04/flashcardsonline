@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./Profile.css";
 import { useNavigate } from "react-router-dom";
-import { authFetch } from "./authFetch"; // <--- NEU
+import { authFetch } from "./authFetch";
+import eyeOff from "./assets/images/icons8-invisible-24.png";
+import eyeOn from "./assets/images/icons8-eye-24.png"; // <--- NEU
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -93,29 +95,25 @@ const Profile = () => {
 
           <label>Password:</label>
           {isEditing ? (
-              <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Type new password"
-                  value={formData.password || ""}
-                  onChange={handleChange}
-              />
+              <div >
+                <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Type new password"
+                    value={formData.password || ""}
+                    onChange={handleChange}
+                />
+                <button
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="togglePasswordButton"
+                >
+                  {showPassword ? <img src={eyeOff} alt="hide" /> : <img src={eyeOn} alt="show" />}
+                </button>
+              </div>
           ) : (
               <p>********</p>
           )}
         </div>
-
-        {isEditing && (
-            <div className="toggle-password">
-              <input
-                  type="checkbox"
-                  id="showPassword"
-                  checked={showPassword}
-                  onChange={() => setShowPassword(!showPassword)}
-              />
-              <label htmlFor="showPassword">show Password</label>
-            </div>
-        )}
 
         <div className="profile-buttons">
           {isEditing ? (
