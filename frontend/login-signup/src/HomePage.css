@@ -11,3 +11,23 @@
   flex-direction: column;
   color: white;
 }
+
+.homepage button{
+  margin: 10px;
+  width: 25vh;
+  height: 7vh;
+  background-color: #4FC28C;
+  color: white;
+  border-radius: 50px;
+  border-color: white;
+  border-style: solid;
+  border-width: 3px;
+  cursor: pointer;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.homepage h1 {
+  font-size: 5vh;
+  margin-bottom: 60px;
+}

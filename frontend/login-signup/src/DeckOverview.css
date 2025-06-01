@@ -1,5 +1,5 @@
 .deck-overview {
-  padding: 120px 40px 40px 40px; /* Top Padding hinzugefügt */
+  padding: 120px 40px 40px 40px;
   font-family: sans-serif;
   min-height: 100vh;
   box-sizing: border-box;
@@ -29,7 +29,7 @@
 
 .deck-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(350px, 2fr));
   gap: 30px;
 }
 
@@ -43,9 +43,9 @@
 
 .deck-box {
   width: 100%;
-  height: 120px;
+  height: 200px;
   background-color: #8ae3b4;
-  border: 2px solid white; /* weißer Rand */
+  border: 2px solid white;
   border-radius: 12px;
   display: flex;
   justify-content: center;
@@ -60,7 +60,7 @@
 
 .deck-name {
   font-size: 16px;
-  color: white; /* weißer Text */
+  color: white;
   font-weight: 600;
 }
 
@@ -93,13 +93,13 @@
   width: 200px;
 }
 
-/* Visueller Hinweis: Deck leuchtet rot bei Löschmodus */
+/* Delete-Hover */
 .deck-card.delete-mode:hover .deck-box {
   background-color: #ff6b6b;
   border-color: #fff;
 }
 
-/* Visueller Hinweis: Stift-Icon im Bearbeiten-Modus */
+/* Edit-Modus Icon */
 .deck-card.edit-mode .deck-box {
   position: relative;
 }
@@ -126,4 +126,51 @@
 
 .learn-button:hover {
   background-color: #6cd09e;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 32px 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+  min-width: 20%;
+  min-height: 20%;
+  text-align: center;
+  align-content: center;
+}
+
+/* NEU: Zentrierte Button-Gruppe */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* NEU: Einheitlicher Stil für alle Popup-Buttons */
+.submit {
+  width: 100px;
+  height: 36px;
+  background: #3eb489;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 20px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 36px;
 }

@@ -42,6 +42,12 @@ public class FlashcardsService {
         return repository.findAllByCategoryId(categoryId);
     }
 
+
+    public List<Flashcards> getByDeckId(Integer deckId) {
+        return repository.findByDeck_DeckId(deckId); // ✅ korrekt
+
+    }
+
 }
 
 

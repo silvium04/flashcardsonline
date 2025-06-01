@@ -48,3 +48,19 @@
 .navbar a:hover::before {
   width: 100%;
 }
+
+.navbar button {
+  padding: 8px 12px;
+  background-color: #3eb489;
+  color: white;
+  border-radius: 6px;
+  border-color: white;
+  border-style: solid;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.navbar button:hover {
+  background-color: #36a07a;
+}

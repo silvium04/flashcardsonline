@@ -3,6 +3,7 @@ package com.project.flashcardsonline.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @Entity
 @Table(name = "FLASHCARDS")
@@ -28,7 +29,25 @@ public class Flashcards {
     @Column
     private Integer step;
 
- // Konstruktoren erstellen -> Standart, alle anderen ohne Id!!!!
+    public Flashcards(Decks deck, String frontText, String backText, LocalDateTime creationDate) {
+        this.deck = deck;
+        this.frontText = frontText;
+        this.backText = backText;
+        this.creationDate = creationDate;
+    }
+
+    public Flashcards(Decks deck, String frontText, String backText, LocalDateTime creationDate, LocalDateTime lastRight, Integer step) {
+        this.deck = deck;
+        this.frontText = frontText;
+        this.backText = backText;
+        this.creationDate = creationDate;
+        this.lastRight = lastRight;
+        this.step = step;
+    }
+
+    public Flashcards() {
+
+    }
 
     public Integer getFlashcardId() {
         return flashcardId;
@@ -100,5 +119,20 @@ public class Flashcards {
 
     public void setDeck(Decks deck) {
         this.deck = deck;
+    }
+
+    @Override
+    public String toString() {
+        return "Flashcards{" +
+                "flashcardId=" + flashcardId +
+                ", deck=" + deck +
+                ", frontText='" + frontText + '\'' +
+                ", backText='" + backText + '\'' +
+                ", frontImage=" + Arrays.toString(frontImage) +
+                ", backImage=" + Arrays.toString(backImage) +
+                ", creationDate=" + creationDate +
+                ", lastRight=" + lastRight +
+                ", step=" + step +
+                '}';
     }
 }

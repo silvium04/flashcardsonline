@@ -23,6 +23,28 @@ public class Decks {
     @JoinColumn(name = "userId", nullable = false)
     private Users user;
 
+
+    @OneToMany(mappedBy = "deck")
+    private Set<DecksCategories> decksCategories;
+
+
+    public Decks(String name, LocalDateTime creationDate, Users user) {
+        this.name = name;
+        this.creationDate = creationDate;
+        this.user = user;
+    }
+
+    public Decks(String name, LocalDateTime creationDate, List<Flashcards> includedFlashcards, Users user) {
+        this.name = name;
+        this.creationDate = creationDate;
+        this.includedFlashcards = includedFlashcards;
+        this.user = user;
+    }
+
+    public Decks() {
+
+    }
+
     public Integer getDeckId() {
         return deckId;
     }
@@ -63,7 +85,6 @@ public class Decks {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "deck")
-    private Set<DecksCategories> decksCategories;
+
 
 }

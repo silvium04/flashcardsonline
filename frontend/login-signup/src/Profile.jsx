@@ -1,17 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Profile.css";
+import { useNavigate } from "react-router-dom";
+import { authFetch } from "./authFetch";
+import eyeOff from "./assets/images/icons8-invisible-24.png";
+import eyeOn from "./assets/images/icons8-eye-24.png"; // <--- NEU
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState({
-    firstName: "Max",
-    lastName: "Mustermann",
-    username: "max123",
-    password: "passwort123",
-  });
-
-  const [formData, setFormData] = useState({ ...userData });
+  const [userData, setUserData] = useState(null);
+  const [formData, setFormData] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await authFetch(`${apiUrl}/api/user/profile`, {
+        method: 'GET',
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUserData(data);
+        setFormData({ ...data, password: ''});
+      } else if (response.status === 401) {
+        navigate('/login');
+      } else {
+        setError('Fehler beim Laden der Benutzerdaten');
+      }
+    } catch (err) {
+      setError('Netzwerk- oder Serverfehler');
+      console.error('Error:', err);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,84 +45,91 @@ const Profile = () => {
   };
 
   const handleSave = () => {
+    // Optional: Änderungen an den Server schicken
     setUserData(formData);
     setIsEditing(false);
   };
 
   return (
-    <div className="profile-container">
-      <h2>Profil</h2>
+      <div className="profile-container">
+        <h2>Profile</h2>
 
-      <div className="profile-info">
-        <label>Vorname:</label>
-        {isEditing ? (
-          <input
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-          />
-        ) : (
-          <p>{userData.firstName}</p>
-        )}
+        {error && <p className="error">{error}</p>}
 
-        <label>Nachname:</label>
-        {isEditing ? (
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-          />
-        ) : (
-          <p>{userData.lastName}</p>
-        )}
+        <div className="profile-info">
+          <label>First Name:</label>
+          {isEditing ? (
+              <input
+                  type="text"
+                  name="firstname"
+                  value={formData.firstname || ""}
+                  onChange={handleChange}
+              />
+          ) : (
+              <p>{userData?.firstname}</p>
+          )}
 
-        <label>Username:</label>
-        {isEditing ? (
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-          />
-        ) : (
-          <p>{userData.username}</p>
-        )}
+          <label>Last Name:</label>
+          {isEditing ? (
+              <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastname || ""}
+                  onChange={handleChange}
+              />
+          ) : (
+              <p>{userData?.lastname}</p>
+          )}
 
-        <label>Passwort:</label>
-        {isEditing ? (
-          <input
-            type={showPassword ? "text" : "password"}
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        ) : (
-          <p>********</p>
-        )}
-      </div>
+          <label>Username:</label>
+          {isEditing ? (
+              <input
+                  type="text"
+                  name="username"
+                  value={formData.username || ""}
+                  onChange={handleChange}
+              />
+          ) : (
+              <p>{userData?.username}</p>
+          )}
 
-      {isEditing && (
-        <div className="toggle-password">
-          <input
-            type="checkbox"
-            id="showPassword"
-            checked={showPassword}
-            onChange={() => setShowPassword(!showPassword)}
-          />
-          <label htmlFor="showPassword">Passwort anzeigen</label>
+          <label>Password:</label>
+          {isEditing ? (
+              <div >
+                <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Type new password"
+                    value={formData.password || ""}
+                    onChange={handleChange}
+                />
+                <button
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="togglePasswordButton"
+                >
+                  {showPassword ? <img src={eyeOff} alt="hide" /> : <img src={eyeOn} alt="show" />}
+                </button>
+              </div>
+          ) : (
+              <p>********</p>
+          )}
         </div>
-      )}
 
-      <div className="profile-buttons">
-        {isEditing ? (
-          <button onClick={handleSave}>Speichern</button>
-        ) : (
-          <button onClick={() => setIsEditing(true)}>Bearbeiten</button>
-        )}
+        <div className="profile-buttons">
+          {isEditing ? (
+              <button onClick={handleSave}>Save Changes</button>
+          ) : (
+              <div>
+                <div>
+                  <button onClick={() => setIsEditing(true)}>Edit</button>
+                </div>
+                <div>
+                  <button>Delete Profile</button>
+                </div>
+              </div>
+          )}
+        </div>
       </div>
-    </div>
   );
 };
 

@@ -1,27 +1,70 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { authFetch } from "./authFetch";
 import "./DeckDetail.css";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const DeckDetail = () => {
-  const { id } = useParams();
+  const { deckId } = useParams();
   const navigate = useNavigate();
   const [cards, setCards] = useState([]);
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
+  const [frontText, setFrontText] = useState("");
+  const [backText, setBackText] = useState("");
   const [deleteMode, setDeleteMode] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
-  const handleAddCard = () => {
-    if (question && answer) {
-      const newCard = {
-        id: Date.now(),
-        question,
-        answer,
-        flipped: false,
-      };
-      setCards([...cards, newCard]);
-      setQuestion("");
-      setAnswer("");
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [tempQuestion, setTempQuestion] = useState("");
+  const [tempAnswer, setTempAnswer] = useState("");
+
+  useEffect(() => {
+    const fetchFlashcards = async () => {
+      try {
+        const response = await authFetch(`${apiUrl}/api/flashcards/deck/${deckId}`);
+        if (response.ok) {
+          const data = await response.json();
+          const cardsWithFlip = data.map((card) => ({ ...card, flipped: false }));
+          setCards(cardsWithFlip);
+        } else {
+          console.error("Fehler beim Laden der Flashcards");
+        }
+      } catch (err) {
+        console.error("Netzwerkfehler", err);
+      }
+    };
+
+    fetchFlashcards();
+  }, [deckId]);
+
+  const handleAddCard = async () => {
+    if (frontText && backText) {
+      try {
+        const response = await authFetch(`${apiUrl}/api/flashcards/create`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            frontText: frontText,
+            backText: backText,
+            deck: { deckId: parseInt(deckId) },
+          }),
+        });
+
+        if (response.ok) {
+          const savedCard = await response.json();
+          setCards((prev) => [...prev, { ...savedCard, flipped: false }]);
+          setFrontText("");
+          setBackText("");
+        } else {
+          console.error("Konnte Karte nicht speichern");
+        }
+      } catch (err) {
+        console.error("Netzwerkfehler beim Speichern", err);
+      }
     }
   };
 
@@ -33,58 +76,97 @@ const DeckDetail = () => {
     );
   };
 
-  const handleDelete = (cardId) => {
-    const confirmed = window.confirm(
-      "Möchtest du diese Karte wirklich löschen?"
-    );
-    if (confirmed) {
-      setCards((prevCards) => prevCards.filter((card) => card.id !== cardId));
-    }
+  const confirmDelete = (cardId) => {
+    setSelectedCard(cardId);
+    setShowDeletePopup(true);
   };
 
-  const handleEdit = (cardId) => {
-    const cardToEdit = cards.find((card) => card.id === cardId);
-    if (!cardToEdit) return;
-
-    const newQuestion = prompt("Neue Frage:", cardToEdit.question);
-    const newAnswer = prompt("Neue Antwort:", cardToEdit.answer);
-
-    if (newQuestion && newAnswer) {
-      setCards((prevCards) =>
-        prevCards.map((card) =>
-          card.id === cardId
-            ? { ...card, question: newQuestion, answer: newAnswer }
-            : card
-        )
-      );
+  const handleDeleteConfirmed = async () => {
+    try {
+      const response = await authFetch(`${apiUrl}/api/flashcards/delete/${selectedCard}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        setCards((prevCards) => prevCards.filter((card) => card.id !== selectedCard));
+      } else {
+        console.error("Konnte Karte nicht löschen");
+      }
+    } catch (err) {
+      console.error("Netzwerkfehler beim Löschen", err);
     }
+    setShowDeletePopup(false);
+    setSelectedCard(null);
+  };
+
+  const startEdit = (card) => {
+    setSelectedCard(card.id);
+    setTempQuestion(card.frontText);
+    setTempAnswer(card.backText);
+    setShowEditPopup(true);
+  };
+
+  const handleEditConfirmed = async () => {
+    if (!tempQuestion || !tempAnswer) return;
+
+    try {
+      const response = await authFetch(`${apiUrl}/api/flashcards/update/`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          flashcardId: selectedCard,
+          frontText: tempQuestion,
+          backText: tempAnswer,
+          deck: { deckId: parseInt(deckId) },
+        }),
+      });
+
+      if (response.ok) {
+        const updatedCard = await response.json();
+        setCards((prevCards) =>
+          prevCards.map((card) =>
+            card.id === selectedCard ? { ...updatedCard, flipped: false } : card
+          )
+        );
+      } else {
+        console.error("Konnte Karte nicht aktualisieren");
+      }
+    } catch (err) {
+      console.error("Netzwerkfehler beim Aktualisieren", err);
+    }
+
+    setShowEditPopup(false);
+    setSelectedCard(null);
+    setTempQuestion("");
+    setTempAnswer("");
   };
 
   return (
     <div className="deck-detail">
-      <h2>Deck {id}</h2>
+      <h2>Deck {deckId}</h2>
 
       <div className="card-form">
         <input
           type="text"
-          placeholder="Frage"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
+          placeholder="Question"
+          value={frontText}
+          onChange={(e) => setFrontText(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Antwort"
-          value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
+          placeholder="Answer"
+          value={backText}
+          onChange={(e) => setBackText(e.target.value)}
         />
-        <button onClick={handleAddCard}>Karteikarte erstellen</button>
+        <button onClick={handleAddCard}>add</button>
         <button
           onClick={() => {
             setDeleteMode(!deleteMode);
             setEditMode(false);
           }}
         >
-          {deleteMode ? "Löschmodus beenden" : "Karte löschen"}
+          {deleteMode ? "stop deleting" : "delete cards"}
         </button>
         <button
           onClick={() => {
@@ -92,7 +174,7 @@ const DeckDetail = () => {
             setDeleteMode(false);
           }}
         >
-          {editMode ? "Bearbeitungsmodus beenden" : "Karte bearbeiten"}
+          {editMode ? "stop editing" : "edit cards"}
         </button>
       </div>
 
@@ -102,17 +184,61 @@ const DeckDetail = () => {
             key={card.id}
             className={`flashcard ${card.flipped ? "flipped" : ""} ${
               deleteMode ? "delete-mode" : ""
-            }`}
+            } ${editMode ? "edit-mode" : ""}`}
             onClick={() => {
-              if (deleteMode) handleDelete(card.id);
-              else if (editMode) handleEdit(card.id);
+              if (deleteMode) confirmDelete(card.id);
+              else if (editMode) startEdit(card);
               else toggleFlip(card.id);
             }}
           >
-            {card.flipped ? card.answer : card.question}
+            {card.flipped ? card.backText : card.frontText}
           </div>
         ))}
       </div>
+
+      {showDeletePopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <p>Do you really want to delete this card?</p>
+            <div className="button-group">
+              <div className="submit" onClick={handleDeleteConfirmed}>
+                Delete
+              </div>
+              <div className="submit" onClick={() => setShowDeletePopup(false)}>
+                Cancel
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showEditPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <p>Edit card:</p>
+            <input
+              type="text"
+              value={tempQuestion}
+              onChange={(e) => setTempQuestion(e.target.value)}
+              placeholder="Question"
+            />
+            <input
+              type="text"
+              value={tempAnswer}
+              onChange={(e) => setTempAnswer(e.target.value)}
+              placeholder="Answer"
+            />
+            <div className="button-group">
+              <div className="submit" onClick={handleEditConfirmed}>
+                Save
+              </div>
+              <div className="submit" onClick={() => setShowEditPopup(false)}>
+                Cancel
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

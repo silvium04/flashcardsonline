@@ -1,15 +1,14 @@
 package com.project.flashcardsonline.Controller;
 
+import com.project.flashcardsonline.dto.LoginRequest;
 import com.project.flashcardsonline.model.Users;
 import com.project.flashcardsonline.repositories.UserRepository;
+import com.project.flashcardsonline.security.JwtUtil;
 import com.project.flashcardsonline.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,46 +19,55 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class AuthController {
-	private final AuthenticationManager authManager;
+
 	private final UserRepository userRepo;
 	private final UserService userService;
+	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	private final JwtUtil jwtUtil;
 
-	public AuthController(AuthenticationManager authManager, UserRepository userRepo, UserService userService) {
-		this.authManager = authManager;
+	public AuthController(UserRepository userRepo, UserService userService, JwtUtil jwtUtil) {
 		this.userRepo = userRepo;
 		this.userService = userService;
+		this.jwtUtil = jwtUtil;
 	}
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-		UsernamePasswordAuthenticationToken authToken =
-			new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
-
-		try {
-			Authentication authentication = authManager.authenticate(authToken);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-
-			return ResponseEntity.ok(Map.of("message", "Login successful"));
-		} catch (AuthenticationException e) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Login unsuccessful"));
+		Users user = userRepo.findByUsername(loginRequest.getUsername());
+		if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid credentials"));
 		}
+
+		String jwt = jwtUtil.generateToken(user.getUsername());
+
+		return ResponseEntity.ok(Map.of("token", jwt));
+
 	}
 
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@RequestBody Users user) {
-		if (userService.existsByUsername(user.getUsername())) {
-			return ResponseEntity.badRequest().body(Map.of("error", "Username already exists"));
+		try {
+			System.out.println("hallo from register" + user.toString());
+			if (userService.existsByUsername(user.getUsername())) {
+				System.out.println("Username already exists: " + user.getUsername());
+				return ResponseEntity.badRequest().body(Map.of("error", "Username already exists"));
+			}
+
+
+			Users savedUser = userService.createUser(user);
+			if (savedUser == null || savedUser.getUserId() == null) {
+				System.out.println("Failed to save user: " + user.getUsername());
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+						.body(Map.of("error", "Failed to save user"));
+			}
+
+			System.out.println("User registered: " + savedUser.getUsername() + " with ID: " + savedUser.getUserId());
+			return ResponseEntity.ok(Map.of("message", "User registered successfully", "userId", savedUser.getUserId()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("error", "Registration failed: " + e.getMessage()));
 		}
-		if (user.getUsername() == null || user.getUsername().isEmpty() ||
-			user.getPassword() == null || user.getPassword().isEmpty() ||
-			user.getFirstname() == null || user.getFirstname().isEmpty() ||
-			user.getLastname() == null || user.getLastname().isEmpty()) {
-			return ResponseEntity.badRequest().body(Map.of("error", "Field cannot be empty"));
-		}
-		if (user.getPassword().length() < 8) {
-			return ResponseEntity.badRequest().body(Map.of("error", "Password must be at least 8 characters long"));
-		}
-		userService.createUser(user);
-		return ResponseEntity.ok(Map.of("message", "User registered successfully"));
 	}
+
 }

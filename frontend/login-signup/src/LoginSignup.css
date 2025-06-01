@@ -6,7 +6,8 @@
   background: #fff;
   padding-bottom: 30px;
   width: 600px;
-  border-radius: 16px; /* <-- Das hier hinzufügen */
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .form-header {
@@ -65,31 +66,52 @@
 
 .submit-container {
   display: flex;
-  gap: 30px;
-  margin: 60px auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 30px auto;
 }
 
-.submit {
+.bigbutton {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 220px;
-  height: 59px;
-  color: #fff;
-  background: #3eb489;
+  margin: 5px;
+  width: 15vh;
+  height: 5vh;
+  background-color: #4FC28C;
+  color: #ebeef1;
+  font-size: 20px;
+  font-weight: 600;
   border-radius: 50px;
-  font-size: 19px;
-  font-weight: 700;
+  border-color: #93e9be;
+  border-style: solid;
+  border-width: 2px;
   cursor: pointer;
 }
 
-.submit.small {
-  width: 120px; /* kleinerer Button */
-  height: 40px;
-  font-size: 14px;
-  color: black;
-  background-color: white;
-  margin-top: 10px;
+.smallbutton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2px;
+  width: 13vh;
+  height: 4vh;
+  background-color: #4FC28C;
+  color: #ebeef1;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 50px;
+  border-color: #93e9be;
+  border-style: solid;
+  border-width: 2px;
+  cursor: pointer;
+}
+
+.togglePasswordButton {
+  border: none;
+  background: transparent;
 }
 
 .page-wrapper {
