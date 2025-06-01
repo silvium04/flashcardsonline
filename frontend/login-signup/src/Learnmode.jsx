@@ -1,31 +1,96 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Learnmode.css";
-
-const sampleDecks = {
-  1: [
-    {
-      id: 1,
-      question: "Who founded Apple?",
-      answer: "Steve Jobs",
-    },
-    {
-      id: 2,
-      question: "Was ist JSX?",
-      answer: "Syntax-Erweiterung für JavaScript.",
-    },
-  ],
-  // Weitere Decks können hier simuliert werden
-};
+import {authFetch} from "./authFetch";
 
 const Learnmode = () => {
-  const { id } = useParams();
+  const { deckId, mode } = useParams();
   const navigate = useNavigate();
-  const cards = sampleDecks[id] || [];
+  const [cards, setCards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
+    const [leitnerButton, setLeitnerButton] = useState();
 
   const currentCard = cards[currentIndex];
+
+  const fetchCards = async () => {
+    try {
+      if (mode === "normal") {
+        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/learning/normal/${deckId}`, {
+          method: 'GET'
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch random cards");
+        }
+        if (response.ok) {
+          const data = await response.json();
+          setCards(data);
+        } else {
+          console.error("Error fetching cards:", response.status);
+        }
+      }
+      else if (mode === "backwards") {
+        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/learning/backwards/${deckId}`, {
+            method: 'GET'
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setCards(data);
+        } else {
+          console.error("Error fetching cards:", response.status);
+        }
+      }
+      else if (mode === "random") {
+        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/learning/random/${deckId}`, {
+            method: 'GET'
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setCards(data);
+        } else {
+          console.error("Error fetching cards:", response.status);
+        }
+      }
+      else if (mode === "leitner") {
+        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/learning/leitner/${deckId}`, {
+            method: 'GET'
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setCards(data);
+        } else {
+          console.error("Error fetching cards:", response.status);
+        }
+      }
+      else {
+        console.error("Invalid mode:", mode);
+      }
+    } catch (err) {
+      console.error("Network error:", err);
+    }
+  }
+
+  useEffect(() => {
+    fetchCards();
+  }, [])
+
+  const updateLeitnerCard = async () => {
+    try {
+      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/learning/updateLeitnerFlashcard`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          flashcardId: currentCard.flashcardId
+        })
+      })
+    } catch (err) {
+        console.error("Error updating Leitner card:", err);
+    }
+  }
+
+
 
   const handleNext = () => {
     if (currentIndex < cards.length - 1) {
@@ -52,11 +117,21 @@ const Learnmode = () => {
 
   return (
     <div className="learnmode">
-      <div className="deck-title">Deck {id}</div>
+      <div className="deck-title">Deck {deckId}</div>
 
       <div className="card-display" onClick={() => setFlipped(!flipped)}>
-        {flipped ? currentCard.answer : currentCard.question}
+        {flipped ? currentCard.frontText : currentCard.backText}
       </div>
+
+      { mode === "leitner" &&(
+        <button
+            value={leitnerButton}
+            onClick={() => {updateLeitnerCard()}}
+        >
+          correct
+        </button>
+
+      )}
 
       <div className="controls">
         <button onClick={handlePrev}>&larr;</button>

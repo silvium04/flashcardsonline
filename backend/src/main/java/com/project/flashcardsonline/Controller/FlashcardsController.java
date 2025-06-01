@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import com.project.flashcardsonline.dto.FlashcardDTO;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -18,22 +19,24 @@ public class FlashcardsController {
         this.service = service;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public Flashcards createCard(@RequestBody Flashcards card) {
+        card.setStep(1);
+        card.setLastRight(LocalDateTime.now().minusDays(1));
         return service.create(card);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public Flashcards updateCard(@RequestBody Flashcards card) {
         return service.update(card);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteCard(@PathVariable Integer id) {
         service.delete(id);
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Flashcards> getAllCards() {
         return service.getAll();
     }
@@ -60,8 +63,11 @@ public class FlashcardsController {
         return cards.stream()
                 .map(card -> new FlashcardDTO(
                         card.getFlashcardId(),
+                        card.getDeck().getDeckId(),
                         card.getFrontText(),
-                        card.getBackText()
+                        card.getBackText(),
+                        card.getStep(),
+                        card.getLastRight()
                 ))
                 .toList();
     }

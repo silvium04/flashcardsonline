@@ -28,7 +28,7 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/decks" element={<DeckOverview />} />
         <Route path="/deck/:deckId" element={<DeckDetail />} />
-        <Route path="/learn/:deckId" element={<Learnmode />} />
+        <Route path="/learn/:deckId/:mode" element={<Learnmode />} />
         <Route path="/profile" element={<Profile />} />
         {/* Muss vorhanden sein */}
         <Route path="*" element={<HomePage />} />

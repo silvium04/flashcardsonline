@@ -1,16 +1,12 @@
 package com.project.flashcardsonline.Controller;
 
+import com.project.flashcardsonline.dto.LoginRequest;
 import com.project.flashcardsonline.model.Users;
 import com.project.flashcardsonline.repositories.UserRepository;
 import com.project.flashcardsonline.security.JwtUtil;
 import com.project.flashcardsonline.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;

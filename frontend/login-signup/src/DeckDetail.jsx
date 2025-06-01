@@ -9,8 +9,8 @@ const DeckDetail = () => {
   const { deckId } = useParams();
   const navigate = useNavigate();
   const [cards, setCards] = useState([]);
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
+  const [frontText, setFrontText] = useState("");
+  const [backText, setBackText] = useState("");
   const [deleteMode, setDeleteMode] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
@@ -40,16 +40,16 @@ const DeckDetail = () => {
   }, [deckId]);
 
   const handleAddCard = async () => {
-    if (question && answer) {
+    if (frontText && backText) {
       try {
-        const response = await authFetch(`${apiUrl}/api/flashcards`, {
+        const response = await authFetch(`${apiUrl}/api/flashcards/create`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            frontText: question,
-            backText: answer,
+            frontText: frontText,
+            backText: backText,
             deck: { deckId: parseInt(deckId) },
           }),
         });
@@ -57,8 +57,8 @@ const DeckDetail = () => {
         if (response.ok) {
           const savedCard = await response.json();
           setCards((prev) => [...prev, { ...savedCard, flipped: false }]);
-          setQuestion("");
-          setAnswer("");
+          setFrontText("");
+          setBackText("");
         } else {
           console.error("Konnte Karte nicht speichern");
         }
@@ -83,7 +83,7 @@ const DeckDetail = () => {
 
   const handleDeleteConfirmed = async () => {
     try {
-      const response = await authFetch(`${apiUrl}/api/flashcards/${selectedCard}`, {
+      const response = await authFetch(`${apiUrl}/api/flashcards/delete/${selectedCard}`, {
         method: "DELETE",
       });
       if (response.ok) {
@@ -100,8 +100,8 @@ const DeckDetail = () => {
 
   const startEdit = (card) => {
     setSelectedCard(card.id);
-    setTempQuestion(card.question);
-    setTempAnswer(card.answer);
+    setTempQuestion(card.frontText);
+    setTempAnswer(card.backText);
     setShowEditPopup(true);
   };
 
@@ -109,7 +109,7 @@ const DeckDetail = () => {
     if (!tempQuestion || !tempAnswer) return;
 
     try {
-      const response = await authFetch(`${apiUrl}/api/flashcards`, {
+      const response = await authFetch(`${apiUrl}/api/flashcards/update/`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -150,14 +150,14 @@ const DeckDetail = () => {
         <input
           type="text"
           placeholder="Question"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
+          value={frontText}
+          onChange={(e) => setFrontText(e.target.value)}
         />
         <input
           type="text"
           placeholder="Answer"
-          value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
+          value={backText}
+          onChange={(e) => setBackText(e.target.value)}
         />
         <button onClick={handleAddCard}>add</button>
         <button
@@ -191,7 +191,7 @@ const DeckDetail = () => {
               else toggleFlip(card.id);
             }}
           >
-            {card.flipped ? card.answer : card.question}
+            {card.flipped ? card.backText : card.frontText}
           </div>
         ))}
       </div>

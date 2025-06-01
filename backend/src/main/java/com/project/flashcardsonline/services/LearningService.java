@@ -24,32 +24,32 @@ public class LearningService {
 		this.decksRepository = decksRepository;
 	}
 
-	public List<Flashcards> getRandomOrderedDeck(Integer deckId){
+	public List<Flashcards> getRandomOrderedFlashcards(Integer deckId){
 		Decks deck = decksRepository.getDecksByDeckId(deckId);
 		List<Flashcards> flashcards = deck.getIncludedFlashcards();
 		Collections.shuffle(flashcards);
 		return flashcards;
 	}
 
-	public List<Flashcards> getBackwardsDeck(Integer deckId){
+	public List<Flashcards> getBackwardsFlashcards(Integer deckId){
 		Decks deck = decksRepository.getDecksByDeckId(deckId);
 		List<Flashcards> flashcards = deck.getIncludedFlashcards();
 		Collections.reverse(flashcards);
 		return flashcards;
 	}
 
-	public List<Flashcards> getNormalDeck(Integer deckId){
+	public List<Flashcards> getNormalFlashcards(Integer deckId){
 		Decks deck = decksRepository.getDecksByDeckId(deckId);
 		return deck.getIncludedFlashcards();
 	}
 
-	public List<Flashcards> getLeitnerDeck(Integer deckId){
+	public List<Flashcards> getLeitnerFlashcards(Integer deckId){
 		Decks deck = decksRepository.getDecksByDeckId(deckId);
 		List<Flashcards> flashcards = deck.getIncludedFlashcards();
-		return sortLeitnerDeck(flashcards);
+		return sortLeitnerFlashcards(flashcards);
 	}
 
-	public List<Flashcards> sortLeitnerDeck(List<Flashcards> flashcards){
+	public List<Flashcards> sortLeitnerFlashcards(List<Flashcards> flashcards){
 		List<Flashcards> flashcardsSorted = new ArrayList<>();
 		for (Flashcards flashcard : flashcards) {
 			if (isDue(flashcard)) {
@@ -75,4 +75,16 @@ public class LearningService {
 		return false;
 	}
 
+	public void updateLeitnerFlashcard(Flashcards flashcard) {
+		System.out.println("Updating flashcard: " + flashcard.toString());
+		Flashcards updateCard = flashcardsService.getById(flashcard.getFlashcardId());
+		System.out.println("Flashcard before update: " + updateCard.toString());
+		if (updateCard.getStep() < 5) {
+			updateCard.setStep(updateCard.getStep() + 1);
+			System.out.println("Step increased to: " + updateCard.getStep());
+		}
+		updateCard.setLastRight(LocalDateTime.now());
+		flashcardsService.update(updateCard);
+		System.out.println(flashcardsService.getById(flashcard.getFlashcardId()).toString());
+	}
 }

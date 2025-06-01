@@ -12,7 +12,7 @@ const DeckOverview = () => {
   const [decks, setDecks] = useState([]);
   const [mode, setMode] = useState(null);
   const navigate = useNavigate();
-  const [showPopup, setShowPopup] = useState(false);
+  const [showLearningPopup, setShowLearningPopup] = useState(false);
   const [dropdownValue, setDropdownValue] = useState("normal");
   const [selectedDeck, setSelectedDeck] = useState(null);
 
@@ -55,7 +55,7 @@ const DeckOverview = () => {
     if (newName) {
       setDecks((prev) =>
         prev.map((deck) =>
-          deck.id === deckId ? { ...deck, name: newName } : deck
+          deck.deckId === deckId ? { ...deck, name: newName } : deck
         )
       );
       setMode(null);
@@ -133,7 +133,7 @@ const DeckOverview = () => {
               onClick={(e) => {
                 e.stopPropagation();
                 setSelectedDeck(deck.deckId);
-                setShowPopup(true);
+                setShowLearningPopup(true);
               }}
             >
               Start Learning
@@ -143,7 +143,7 @@ const DeckOverview = () => {
       </div>
 
       {/* Start Learning Popup */}
-      {showPopup && (
+      {showLearningPopup && (
         <div className="popup-overlay">
           <div className="popup-content">
             <h3>Choose learning mode</h3>
@@ -160,13 +160,13 @@ const DeckOverview = () => {
               <div
                 className="submit"
                 onClick={() => {
-                  setShowPopup(false);
-                  navigate(`/learn/${selectedDeck}?mode=${dropdownValue}`);
+                  setShowLearningPopup(false);
+                  navigate(`/learn/${selectedDeck}/${dropdownValue}`);
                 }}
               >
                 Start
               </div>
-              <div className="submit" onClick={() => setShowPopup(false)}>
+              <div className="submit" onClick={() => setShowLearningPopup(false)}>
                 Cancel
               </div>
             </div>
