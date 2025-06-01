@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginSignup.css";
+import eyeOn from './assets/images/icons8-eye-24.png'
+import eyeOff from './assets/images/icons8-invisible-24.png'
 
 const Signup = () => {
   const [firstname, setFirstname] = useState("");
@@ -9,6 +11,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleSignUp = async () => {
         if (firstname.length < 1 || lastname.length < 1 || username.length < 1 || password.length < 8) {
@@ -74,20 +77,26 @@ const Signup = () => {
         </div>
         <div className="input">
           <input
-            type="password"
+              type={showPassword ? "text" : "password"}
             placeholder="Password (min. 8 characters)"
             value={password}
             minLength={8}
             required={true}
             onChange={(e) => setPassword(e.target.value)}
           />
+            <button
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="togglePasswordButton"
+            >
+                {showPassword ? <img src={eyeOff} alt="hide" /> : <img src={eyeOn} alt="show" />}
+            </button>
         </div>
       </div>
       <div className="submit-container">
-        <button className="submit" onClick={handleSignUp}>
+        <button className="bigbutton" onClick={handleSignUp}>
           Sign Up
         </button>
-        <button className="submit small" onClick={() => navigate("/login")}>
+        <button className="smallbutton" onClick={() => navigate("/login")}>
           Login
         </button>
       </div>
