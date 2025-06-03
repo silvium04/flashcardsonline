@@ -4,7 +4,7 @@ import com.project.flashcardsonline.dto.DeckDTO;
 import com.project.flashcardsonline.model.Decks;
 import com.project.flashcardsonline.model.Users;
 import com.project.flashcardsonline.repositories.UserRepository;
-import com.project.flashcardsonline.services.DecksService;
+import com.project.flashcardsonline.service.DecksService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;

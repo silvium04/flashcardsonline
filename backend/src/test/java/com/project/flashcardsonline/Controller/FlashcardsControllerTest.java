@@ -3,7 +3,7 @@ package com.project.flashcardsonline.Controller;
 import com.project.flashcardsonline.dto.FlashcardDTO;
 import com.project.flashcardsonline.model.Decks;
 import com.project.flashcardsonline.model.Flashcards;
-import com.project.flashcardsonline.services.FlashcardsService;
+import com.project.flashcardsonline.service.FlashcardsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

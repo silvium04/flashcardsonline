@@ -70,7 +70,7 @@ public class LearningServiceTest {
 		when(deck.getIncludedFlashcards()).thenReturn(exampleFlashcards);
 		when(decksRepository.getDecksByDeckId(1)).thenReturn(deck);
 
-		List<Flashcards> result = learningService.getNormalDeck(1);
+		List<Flashcards> result = learningService.getNormalFlashcards(1);
 
 		assertIterableEquals(exampleFlashcards, result);
 	}
@@ -81,9 +81,9 @@ public class LearningServiceTest {
 		when(deck.getIncludedFlashcards()).thenReturn(exampleFlashcards);
 		when(decksRepository.getDecksByDeckId(1)).thenReturn(deck);
 
-		List<Flashcards> result = learningService.getBackwardsDeck(1);
+		List<Flashcards> result = learningService.getBackwardsFlashcards(1);
 
-		List<Flashcards> expected = Arrays.asList(card3, card2, card1);
+		List<Flashcards> expected = Arrays.asList(card10, card9, card8, card7, card6, card5, card4, card3, card2, card1);
 		assertIterableEquals(expected, result);
 	}
 
@@ -93,9 +93,9 @@ public class LearningServiceTest {
 		when(deck.getIncludedFlashcards()).thenReturn(exampleFlashcards);
 		when(decksRepository.getDecksByDeckId(1)).thenReturn(deck);
 
-		List<Flashcards> result = learningService.getRandomOrderedDeck(1);
+		List<Flashcards> result = learningService.getRandomOrderedFlashcards(1);
 
-		assertEquals(3, result.size());
+		assertEquals(10, result.size());
 		assertTrue(result.containsAll(exampleFlashcards));
 	}
 
@@ -105,7 +105,7 @@ public class LearningServiceTest {
 		when(deck.getIncludedFlashcards()).thenReturn(exampleFlashcards);
 		when(decksRepository.getDecksByDeckId(1)).thenReturn(deck);
 
-		List<Flashcards> result = learningService.getLeitnerDeck(1);
+		List<Flashcards> result = learningService.getLeitnerFlashcards(1);
 
 
 		assertEquals(5, result.size());

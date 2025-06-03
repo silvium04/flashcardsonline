@@ -1,7 +1,7 @@
 package com.project.flashcardsonline.Controller;
 
 import com.project.flashcardsonline.model.Users;
-import com.project.flashcardsonline.services.UserService;
+import com.project.flashcardsonline.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
