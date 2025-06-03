@@ -1,7 +1,7 @@
 package com.project.flashcardsonline.Controller;
 
 import com.project.flashcardsonline.model.Flashcards;
-import com.project.flashcardsonline.services.FlashcardsService;
+import com.project.flashcardsonline.service.FlashcardsService;
 import org.springframework.web.bind.annotation.*;
 import com.project.flashcardsonline.dto.FlashcardDTO;
 

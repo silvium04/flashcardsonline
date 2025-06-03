@@ -1,4 +1,4 @@
-package com.project.flashcardsonline.services;
+package com.project.flashcardsonline.service;
 
 import com.project.flashcardsonline.model.Decks;
 import com.project.flashcardsonline.model.Users;

@@ -4,7 +4,7 @@ import com.project.flashcardsonline.dto.LoginRequest;
 import com.project.flashcardsonline.model.Users;
 import com.project.flashcardsonline.repositories.UserRepository;
 import com.project.flashcardsonline.security.JwtUtil;
-import com.project.flashcardsonline.services.UserService;
+import com.project.flashcardsonline.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
