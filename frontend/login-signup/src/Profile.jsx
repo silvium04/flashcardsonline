@@ -21,21 +21,21 @@ const Profile = () => {
   const fetchUserData = async () => {
     try {
       const response = await authFetch(`${apiUrl}/api/user/profile`, {
-        method: 'GET',
+        method: "GET",
       });
 
       if (response.ok) {
         const data = await response.json();
         setUserData(data);
-        setFormData({ ...data, password: ''});
+        setFormData({ ...data, password: "" });
       } else if (response.status === 401) {
-        navigate('/login');
+        navigate("/login");
       } else {
-        setError('Fehler beim Laden der Benutzerdaten');
+        setError("Fehler beim Laden der Benutzerdaten");
       }
     } catch (err) {
-      setError('Netzwerk- oder Serverfehler');
-      console.error('Error:', err);
+      setError("Netzwerk- oder Serverfehler");
+      console.error("Error:", err);
     }
   };
 
@@ -51,85 +51,96 @@ const Profile = () => {
   };
 
   return (
-      <div className="profile-container">
-        <h2>Profile</h2>
+    <div className="profile-container">
+      <h2>Profile</h2>
 
-        {error && <p className="error">{error}</p>}
+      {error && <p className="error">{error}</p>}
 
-        <div className="profile-info">
-          <label>First Name:</label>
+      <div className="inputs">
+        <div className="input">
           {isEditing ? (
-              <input
-                  type="text"
-                  name="firstname"
-                  value={formData.firstname || ""}
-                  onChange={handleChange}
-              />
+            <input
+              type="text"
+              name="firstname"
+              placeholder="First Name"
+              value={formData.firstname || ""}
+              onChange={handleChange}
+            />
           ) : (
-              <p>{userData?.firstname}</p>
-          )}
-
-          <label>Last Name:</label>
-          {isEditing ? (
-              <input
-                  type="text"
-                  name="lastName"
-                  value={formData.lastname || ""}
-                  onChange={handleChange}
-              />
-          ) : (
-              <p>{userData?.lastname}</p>
-          )}
-
-          <label>Username:</label>
-          {isEditing ? (
-              <input
-                  type="text"
-                  name="username"
-                  value={formData.username || ""}
-                  onChange={handleChange}
-              />
-          ) : (
-              <p>{userData?.username}</p>
-          )}
-
-          <label>Password:</label>
-          {isEditing ? (
-              <div >
-                <input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    placeholder="Type new password"
-                    value={formData.password || ""}
-                    onChange={handleChange}
-                />
-                <button
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    className="togglePasswordButton"
-                >
-                  {showPassword ? <img src={eyeOff} alt="hide" /> : <img src={eyeOn} alt="show" />}
-                </button>
-              </div>
-          ) : (
-              <p>********</p>
+            <input type="text" value={userData?.firstname || ""} disabled />
           )}
         </div>
 
-        <div className="profile-buttons">
+        <div className="input">
           {isEditing ? (
-              <button onClick={handleSave}>Save Changes</button>
+            <input
+              type="text"
+              name="lastname"
+              placeholder="Last Name"
+              value={formData.lastname || ""}
+              onChange={handleChange}
+            />
           ) : (
-              <div>
-                <div>
-                  <button onClick={() => setIsEditing(true)}>Edit</button>
-                </div>
-                <div>
-                  <button>Delete Profile</button>
-                </div>
-              </div>
+            <input type="text" value={userData?.lastname || ""} disabled />
+          )}
+        </div>
+
+        <div className="input">
+          {isEditing ? (
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={formData.username || ""}
+              onChange={handleChange}
+            />
+          ) : (
+            <input type="text" value={userData?.username || ""} disabled />
+          )}
+        </div>
+
+        <div className="input">
+          {isEditing ? (
+            <>
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="New Password"
+                value={formData.password || ""}
+                onChange={handleChange}
+              />
+              <button
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="togglePasswordButton"
+              >
+                {showPassword ? (
+                  <img src={eyeOff} alt="hide" />
+                ) : (
+                  <img src={eyeOn} alt="show" />
+                )}
+              </button>
+            </>
+          ) : (
+            <input type="password" value="********" disabled />
           )}
         </div>
       </div>
+
+      <div className="profile-buttons">
+        {isEditing ? (
+          <button onClick={handleSave}>Save Changes</button>
+        ) : (
+          <div>
+            <div>
+              <button onClick={() => setIsEditing(true)}>Edit</button>
+            </div>
+            <div>
+              <button>Delete Profile</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
