@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Learnmode.css";
-import {authFetch} from "./authFetch";
+import { authFetch } from "./authFetch";
 
 const Learnmode = () => {
   const { deckId, mode } = useParams();
@@ -9,16 +9,19 @@ const Learnmode = () => {
   const [cards, setCards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
-    const [leitnerButton, setLeitnerButton] = useState();
+  const [leitnerButton, setLeitnerButton] = useState();
 
   const currentCard = cards[currentIndex];
 
   const fetchCards = async () => {
     try {
       if (mode === "normal") {
-        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/learning/normal/${deckId}`, {
-          method: 'GET'
-        });
+        const response = await authFetch(
+          `${process.env.REACT_APP_API_URL}/api/learning/normal/${deckId}`,
+          {
+            method: "GET",
+          }
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch random cards");
         }
@@ -28,69 +31,75 @@ const Learnmode = () => {
         } else {
           console.error("Error fetching cards:", response.status);
         }
-      }
-      else if (mode === "backwards") {
-        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/learning/backwards/${deckId}`, {
-            method: 'GET'
-        });
+      } else if (mode === "backwards") {
+        const response = await authFetch(
+          `${process.env.REACT_APP_API_URL}/api/learning/backwards/${deckId}`,
+          {
+            method: "GET",
+          }
+        );
         if (response.ok) {
           const data = await response.json();
           setCards(data);
         } else {
           console.error("Error fetching cards:", response.status);
         }
-      }
-      else if (mode === "random") {
-        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/learning/random/${deckId}`, {
-            method: 'GET'
-        });
+      } else if (mode === "random") {
+        const response = await authFetch(
+          `${process.env.REACT_APP_API_URL}/api/learning/random/${deckId}`,
+          {
+            method: "GET",
+          }
+        );
         if (response.ok) {
           const data = await response.json();
           setCards(data);
         } else {
           console.error("Error fetching cards:", response.status);
         }
-      }
-      else if (mode === "leitner") {
-        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/learning/leitner/${deckId}`, {
-            method: 'GET'
-        });
+      } else if (mode === "leitner") {
+        const response = await authFetch(
+          `${process.env.REACT_APP_API_URL}/api/learning/leitner/${deckId}`,
+          {
+            method: "GET",
+          }
+        );
         if (response.ok) {
           const data = await response.json();
           setCards(data);
         } else {
           console.error("Error fetching cards:", response.status);
         }
-      }
-      else {
+      } else {
         console.error("Invalid mode:", mode);
       }
     } catch (err) {
       console.error("Network error:", err);
     }
-  }
+  };
 
   useEffect(() => {
     fetchCards();
-  }, [])
+  }, []);
 
   const updateLeitnerCard = async () => {
     try {
-      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/learning/updateLeitnerFlashcard`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          flashcardId: currentCard.flashcardId
-        })
-      })
+      const response = await authFetch(
+        `${process.env.REACT_APP_API_URL}/api/learning/updateLeitnerFlashcard`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            flashcardId: currentCard.flashcardId,
+          }),
+        }
+      );
     } catch (err) {
-        console.error("Error updating Leitner card:", err);
+      console.error("Error updating Leitner card:", err);
     }
-  }
-
-
+  };
 
   const handleNext = () => {
     if (currentIndex < cards.length - 1) {
@@ -123,14 +132,16 @@ const Learnmode = () => {
         {flipped ? currentCard.frontText : currentCard.backText}
       </div>
 
-      { mode === "leitner" &&(
+      {mode === "leitner" && (
         <button
-            value={leitnerButton}
-            onClick={() => {updateLeitnerCard()}}
+          className="exit"
+          value={leitnerButton}
+          onClick={() => {
+            updateLeitnerCard();
+          }}
         >
           correct
         </button>
-
       )}
 
       <div className="controls">
