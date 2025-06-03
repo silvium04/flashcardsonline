@@ -2,11 +2,8 @@ package com.project.flashcardsonline.Controller;
 
 import com.project.flashcardsonline.dto.UserDTO;
 import com.project.flashcardsonline.model.Users;
-import com.project.flashcardsonline.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.project.flashcardsonline.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;

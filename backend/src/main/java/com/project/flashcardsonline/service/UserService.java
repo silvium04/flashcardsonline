@@ -1,8 +1,7 @@
-package com.project.flashcardsonline.services;
+package com.project.flashcardsonline.service;
 
 import com.project.flashcardsonline.model.Users;
 import com.project.flashcardsonline.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
